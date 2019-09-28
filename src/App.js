@@ -19,11 +19,12 @@ class App extends React.Component {
     this.state = {
       route: "home", // "home", "form"
       providers: [
-        {name: "Verizon", logo: "https://ss7.vzw.com/is/image/VerizonWireless/vzw-logo-156-130-c"},
-        {name: "T-mobile", logo: "https://support.t-mobile.com/___sbsstatic___/sftp-sync/images/T_Mobile_logo_social.jpg"},
         {name: "Megafon", logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/9/95/MegaFon_sign%2Blogo_horiz_green_RU_%28RGB%29.svg/512px-MegaFon_sign%2Blogo_horiz_green_RU_%28RGB%29.svg.png"},
         {name: "MTS", logo: "https://upload.wikimedia.org/wikipedia/commons/8/86/MTS_logo_2015.svg"},
-        {name: "Beeline", logo: "https://www.ripe.net/participate/meetings/regional-meetings/images/beeline_logo.png/image"}
+        {name: "Beeline", logo: "https://www.ripe.net/participate/meetings/regional-meetings/images/beeline_logo.png/image"},
+        {name: "Verizon", logo: "https://upload.wikimedia.org/wikipedia/commons/8/81/Verizon_2015_logo_-vector.svg"},
+        {name: "T-mobile", logo: "https://upload.wikimedia.org/wikipedia/commons/e/ee/T-Mobile_logo.svg"},
+        {name: "AT&T", logo: "https://upload.wikimedia.org/wikipedia/commons/3/31/AT%26T_logo_2016.svg"},
       ],
       selectedProvider: {},
       btnState: { text: "Submit", bgColor: "#58AF9B", color: "#F0F4F3" },

@@ -7,13 +7,11 @@ function Input({setInput, error, mask}) {
 	const [hasContent, setHasContent] = React.useState(false);
 
 	function inputChange(event) {
-		console.log(event.target.value);
 		if(event.target.value.length > 0) {
 			setHasContent(true);
 		} else {
 			setHasContent(false);
 		}
-		console.log("Input Change - " + event.target.value);
 		setInput(event.target.value);
 	}
 
