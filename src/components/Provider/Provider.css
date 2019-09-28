@@ -13,7 +13,11 @@
 
 .provider-logo:hover {
 	transform: scale(1.2);
+	-webkit-transform: scale(1.2);
+    -ms-transform: scale(1.2);
 	transition: transform 1s ease-out;
+	-webkit-transition: -webkit-transform 1s ease-out;
+	-o-transition: transform 1s ease-out;
 }
 
 @media screen and (min-width: 550px) and (max-width: 750px) {
