@@ -1,0 +1,39 @@
+.provider {
+	border: 1px solid #AAC3BE;
+	width: 240px;
+	height: 144px;
+	-webkit-box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
+	-moz-box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
+	box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
+}
+
+.provider-logo {
+	width: 180px;
+}
+
+.provider-logo:hover {
+	transform: scale(1.2);
+	transition: transform 1s ease-out;
+}
+
+@media screen and (min-width: 550px) and (max-width: 750px) {
+	.provider {
+		width: 320px;
+		height: 180px;
+	}
+
+	.provider-logo {
+		width: 238px;
+	}
+}
+
+@media screen and (min-width: 751px) {
+	.provider {
+		width: 440px;
+		height: 180px;
+	}
+
+	.provider-logo {
+		width: 270px;
+	}
+}

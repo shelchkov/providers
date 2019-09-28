@@ -1,0 +1,80 @@
+input {
+	letter-spacing: 1px;
+	font-size: 15px !important;
+	padding: 7px 15px;
+	border: 1px solid #CCC;
+	width: 100%;
+	line-height: 1 !important;
+	color: #4B4F4E;
+	width: calc(100% - 30px);
+}
+
+input:focus {
+	outline: none;
+	-webkit-box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
+	-moz-box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
+	box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
+}
+
+.focus-bg:before, .focus-bg:after {
+	content: ""; 
+	position: absolute; 
+	left: 0; 
+	top: 0; 
+	width: 0; 
+	height: 0; 
+	background-color: #EDEDED; 
+	transition: 0.3s; 
+	z-index: -1;
+}
+
+input:focus ~ .focus-bg:before, .has-content ~ .focus-bg:before {
+	transition: 0.3s; 
+	width: 50%; 
+	height: 100%;
+}
+
+input ~ .focus-bg:after {
+	left: auto; 
+	right: 0; 
+	top: auto; 
+	bottom: 0;
+}
+
+input:focus ~ .focus-bg:after, .has-content ~ .focus-bg:after {
+	transition: 0.3s; 
+	width: 50%; 
+	height: 100%;
+}
+
+input ~ label {
+	position: absolute; 
+	left: 17px; 
+	top: 10px; 
+	color: #AAA; 
+	transition: 0.3s; 
+	z-index: -1; 
+	letter-spacing: 0.5px;
+}
+
+input:focus ~ label, .has-content ~ label {
+	top: -18px; 
+	left: 0; 
+	font-size: 12px; 
+	color: #4B4F4E; 
+	transition: 0.3s;
+}
+
+input.error {
+	box-shadow: 0 0 5px #C52423;
+	border: 1px solid #C52423;
+	-webkit-transition: all 0.30s ease-in-out;
+	-moz-transition: all 0.30s ease-in-out;
+	-ms-transition: all 0.30s ease-in-out;
+	-o-transition: all 0.30s ease-in-out;
+}
+
+small {
+	color: #AAA;
+	margin-bottom: -1rem;
+}
