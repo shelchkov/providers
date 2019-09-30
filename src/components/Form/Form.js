@@ -1,9 +1,33 @@
 import React from 'react';
 import './Form.css';
 import Input from '../Input/Input';
+import styled from 'styled-components';
 
 function Form({getHome, setPhone, setAmount, btnState, checkForm, phoneError, 
-	submitForm, amountError, errorMessage, provider}) {	
+	submitForm, amountError, errorMessage, provider}) {
+
+	const FocusBg = styled.span`
+	&:before, &:after {
+		content: ""; 
+		position: absolute; 
+		left: 0; 
+		top: 0; 
+		width: 0; 
+		height: 0; 
+		background-color: #EDEDED; 
+		transition: 0.3s; 
+		z-index: -1;
+	}
+	`;
+
+	const ErrorText = styled.small`
+		color: #AAA;
+		margin-bottom: -1rem;
+	`;
+
+	const ErrorP = styled.p`
+		color: #777;
+	`;
 
 	return (
 		<div className="vh-100 flex flex-column justify-center">
@@ -26,12 +50,12 @@ function Form({getHome, setPhone, setAmount, btnState, checkForm, phoneError,
 						<Input setInput={setPhone} error={phoneError} 
 							mask="+7 (999) 999-99-99" />
 						<label>Phone Number</label>
-						<span className="focus-bg"></span>
+						<FocusBg className="focus-bg"></FocusBg>
 					</div>
 					{ phoneError.length > 0 ?
-					<small className="f6 black-60 db mt1">
+					<ErrorText className="f6 black-60 db mt1">
 						{phoneError}
-					</small>
+					</ErrorText>
 					: null }
 				</div>
 				<div className="w-50 w-40-ns mw-240 mt4 mb1">
@@ -39,12 +63,12 @@ function Form({getHome, setPhone, setAmount, btnState, checkForm, phoneError,
 						<Input setInput={setAmount} error={amountError} 
 							mask="Rub 999"/>
 						<label>Amount</label>
-						<span className="focus-bg"></span>
+						<FocusBg className="focus-bg"></FocusBg>
 					</div>
 					{ amountError.length > 0 ?
-					<small className="f6 black-60 db mt1 mb1">
+					<ErrorText className="f6 black-60 db mt1 mb1">
 						{amountError}
-					</small>
+					</ErrorText>
 					: null }
 				</div>
 			</form>
@@ -61,9 +85,9 @@ function Form({getHome, setPhone, setAmount, btnState, checkForm, phoneError,
 			</button>
 			}
 			{ errorMessage.length > 0 ?
-			<p className="mt0 f6 error-message" title="There was an error. Try Again">
+			<ErrorP className="mt0 f6" title="There was an error. Try Again">
 				{errorMessage}
-			</p>
+			</ErrorP>
 			: null
 			}
 		</div>

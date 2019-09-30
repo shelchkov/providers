@@ -6,7 +6,7 @@ function Cover() {
 	var height = window.innerHeight;
 	const coverShow = useSpring({
 		top: 0,
-		from: { top: height }
+		from: { top: height + 300 }
 	})
 
 	return (
