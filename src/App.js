@@ -115,12 +115,13 @@ class App extends React.Component {
 
   setPhone = (data) => {
     // Remove everything except numbers
-    let phone = data.replace(/-/g, "").replace("(", "").replace(")", "").replace(/ /g, "").replace("+", "").replace(/_/g, "");
-    this.setState({phone: phone});
+    let phone = data.replace(/\D/g, "");
+    this.setState({phone});
   }
 
   setAmount = (data) => {
-    this.setState({amount: data.substring(4).replace(/_/g, "")});
+    let amount = data.replace(/\D/g, "");
+    this.setState({amount});
   }
 
   cover = (route) => {
