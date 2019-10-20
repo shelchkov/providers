@@ -1,7 +1,8 @@
 import React from 'react';
 import Provider from '../Provider/Provider';
+import providers from '../../providersList';
 
-function ProvidersList({providers, selectProvider}) {
+function ProvidersList({selectProvider}) {
 
 	const providersList = providers.map((item, i) => {
 		return (
