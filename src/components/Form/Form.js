@@ -2,41 +2,43 @@ import React from 'react';
 import './Form.css';
 import Input from '../Input/Input';
 import styled from 'styled-components';
+import FormContainer from '../FormContainer/FormContainer';
+
+const FocusBg = styled.span`
+&:before, &:after {
+	content: ""; 
+	position: absolute; 
+	left: 0; 
+	top: 0; 
+	width: 0; 
+	height: 0; 
+	background-color: #EDEDED; 
+	transition: 0.3s; 
+	z-index: -1;
+}
+`;
+
+const ErrorText = styled.small`
+	color: #AAA;
+	margin-bottom: -1rem;
+`;
+
+const ErrorP = styled.p`
+	color: #777;
+`;
 
 function Form({getHome, setPhone, setAmount, btnState, checkForm, phoneError, 
-	submitForm, amountError, errorMessage, provider}) {
-
-	const FocusBg = styled.span`
-	&:before, &:after {
-		content: ""; 
-		position: absolute; 
-		left: 0; 
-		top: 0; 
-		width: 0; 
-		height: 0; 
-		background-color: #EDEDED; 
-		transition: 0.3s; 
-		z-index: -1;
-	}
-	`;
-
-	const ErrorText = styled.small`
-		color: #AAA;
-		margin-bottom: -1rem;
-	`;
-
-	const ErrorP = styled.p`
-		color: #777;
-	`;
+	submitForm, amountError, errorMessage, provider, clearErrors}) {
 
 	return (
-		<div className="vh-100 flex flex-column justify-center">
-			<div className="mt2 w-50 w-40-ns center mb1 mw-240">
+		<>
+			{window.innerHeight > 321 ?
+			<div className="mt2 mb3 ml3 mr3">
 				<img src={provider.logo} alt={provider.name} 
 					title={provider.name} className="logo" />
-			</div>
+			</div> : null }
 
-			<div className="mt3 w-50 w-40-ns center mb1 mw-240">
+			<div className="mb1">
 				<div className="flex items-start">
 					<button onClick={getHome} className="br3 ba ph3 pv2 mb2 pointer btn active get-back-btn bg-transparent">
 						Get Back
@@ -44,11 +46,11 @@ function Form({getHome, setPhone, setAmount, btnState, checkForm, phoneError,
 				</div>
 			</div>
 		
-			<form className="flex flex-column items-center mb3">
-				<div className="mt3 w-50 w-40-ns mw-240">
+			<form className="flex flex-column mb3">
+				<div className="mt3">
 					<div className="relative">
 						<Input setInput={setPhone} error={phoneError} 
-							mask="+7 (999) 999-99-99" />
+							mask="+7 (999) 999-99-99" clearErrors={clearErrors} />
 						<label>Phone Number</label>
 						<FocusBg className="focus-bg"></FocusBg>
 					</div>
@@ -58,10 +60,10 @@ function Form({getHome, setPhone, setAmount, btnState, checkForm, phoneError,
 					</ErrorText>
 					: null }
 				</div>
-				<div className="w-50 w-40-ns mw-240 mt4 mb1">
+				<div className="mt4 mb1">
 					<div className="relative">
 						<Input setInput={setAmount} error={amountError} 
-							mask="Rub 999"/>
+							mask="Rub 999" clearErrors={clearErrors} />
 						<label>Amount</label>
 						<FocusBg className="focus-bg"></FocusBg>
 					</div>
@@ -90,8 +92,8 @@ function Form({getHome, setPhone, setAmount, btnState, checkForm, phoneError,
 			</ErrorP>
 			: null
 			}
-		</div>
+		</>
 	);
 }
 
-export default Form;
+export default FormContainer(Form);

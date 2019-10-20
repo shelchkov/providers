@@ -91,6 +91,13 @@ class App extends React.Component {
     }
   }
 
+  clearErrors = () => {
+    this.setState({
+      amountError: "",
+      phoneError: ""
+    });
+  }
+
   submitForm = () => {
     this.setState({
       errorMessage: "",
@@ -181,7 +188,7 @@ class App extends React.Component {
           checkForm={this.checkForm} submitForm={this.submitForm} 
           phoneError={this.state.phoneError} amountError={this.state.amountError} 
           phone={this.state.phone} errorMessage={this.state.errorMessage} 
-          provider={this.state.selectedProvider} /> 
+          provider={this.state.selectedProvider} clearErrors={this.clearErrors} /> 
         }
         { this.state.showCover ? 
         <Cover /> 
