@@ -6,7 +6,7 @@ import CoverHide from './components/CoverHide/CoverHide';
 import Form from './components/Form/Form';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-import { createStructuredSelector } from 'reselect';
+// import { createStructuredSelector } from 'reselect';
 import { setButtonType } from './redux/button/button.actions';
 import btnStates from './buttonStates';
 

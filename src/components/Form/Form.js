@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import './Form.css';
 import Input from '../Input/Input';
 import styled from 'styled-components';
@@ -35,13 +35,21 @@ const ErrorP = styled.p`
 function Form({getHome, submitForm, provider, errorMessage, 
 	buttonState, setButtonState}) {
 
-	const btnState = buttonState;
-
 	const [formData, setFormData] = useState({phone: "", amount: ""});
 
 	const [formErrors, setFormErrors] = useState({
 		phone: "", amount: ""
 	});
+
+	const [screenSize, setScreenSize] = useState({width: 0, height: 0});
+
+	useEffect(() => {
+		console.log("screenSize Changed");
+		setScreenSize({
+			width: window.innerWidth,
+			height: window.innerHeight
+		});
+	}, [window.innerHeight, window.innerWidth]);
 
 	function setForm(field, data) {
 		let amount = data.replace(/\D/g, "");
@@ -61,28 +69,27 @@ function Form({getHome, submitForm, provider, errorMessage,
 
 		let phoneError = "";
 		let amountError = "";
+		let btnState = btnStates.check;
 
 		// Phone Validation
 		if(formData.phone.length === 0) {
-			setButtonState(btnStates.check);
 			phoneError = "You need to type in your phone number";
 
 		} else if(formData.phone[1] !== "9") {
 			phoneError = "Please provide correct number";
-			setButtonState(btnStates.check);
 		
 		} else if(formData.phone.length !== 11) {
 			phoneError = "Phone number should contain exactly 11 digits";
 		
 		} else {
 			phoneError = "";
-			setButtonState(btnStates.submit);
+			btnState = btnStates.submit;
 		}
 
 		// Amount Validation
 		if(formData.amount < 1) {
 			amountError = "You can choose amount that lies between 1 and 1000 rubles";
-			setButtonState(btnStates.check);
+			btnState = btnStates.check;
 
 		} else {
 			amountError = "";
@@ -92,6 +99,7 @@ function Form({getHome, submitForm, provider, errorMessage,
 			phone: phoneError,
 			amount: amountError
 		});
+		setButtonState(btnState);
 	}
 
 	function clearErrors() {
@@ -102,7 +110,7 @@ function Form({getHome, submitForm, provider, errorMessage,
 
 	return (
 		<>
-			{window.innerHeight > 321 ?
+			{screenSize.height > 321 ?
 			<div className="mt2 mb3 ml3 mr3">
 				<img src={provider.logo} alt={provider.name} 
 					title={provider.name} className="logo" />
