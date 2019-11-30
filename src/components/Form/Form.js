@@ -20,15 +20,18 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 		phone: "", amount: ""
 	});
 
-	const [screenSize, setScreenSize] = useState({width: 0, height: 0});
+	const [screenHeight, setScreenHeight] = useState(window.innerHeight);
 
 	useEffect(() => {
-		console.log("screenSize Changed");
-		setScreenSize({
-			width: window.innerWidth,
-			height: window.innerHeight
-		});
-	}, [window.innerHeight, window.innerWidth]);
+		const resizeHandler = (event) => {
+			setScreenHeight(event.target.innerHeight);
+		}
+
+		window.onresize = resizeHandler;
+		return () => {
+			window.removeEventListener("onresize", resizeHandler);
+		};
+	}, []);
 
 	function setForm(field, data) {
 		let amount = data.replace(/\D/g, "");
@@ -87,7 +90,7 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 
 	return (
 		<>
-			{screenSize.height > 321 ?
+			{screenHeight > 321 ?
 			<div className="mt2 mb3 ml3 mr3">
 				<img src={provider.logo} alt={provider.name} 
 					title={provider.name} className="logo" />
