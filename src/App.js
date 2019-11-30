@@ -14,7 +14,7 @@ const AppDiv = styled.div`
   text-align: center;
 `;
 
-class App extends React.Component {
+class App extends React.PureComponent {
   constructor() {
     super();
     this.state = {
@@ -25,7 +25,6 @@ class App extends React.Component {
       errorMessage: ""
     };
   }
-
 
 
   selectProvider = (provider) => {

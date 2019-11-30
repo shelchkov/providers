@@ -1,39 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import './Form.css';
 import Input from '../Input/Input';
-import styled from 'styled-components';
 import FormContainer from '../FormContainer/FormContainer';
 import btnStates from '../../buttonStates';
 import { connect } from 'react-redux';
 import { selectBtnState } from '../../redux/button/button.selectors';
 import { createStructuredSelector } from 'reselect';
 import { setButtonType } from '../../redux/button/button.actions';
+import FocusBg from './FocusBg';
+import ErrorP from './ErrorP';
+import ErrorText from './ErrorText';
 
-const FocusBg = styled.span`
-&:before, &:after {
-	content: ""; 
-	position: absolute; 
-	left: 0; 
-	top: 0; 
-	width: 0; 
-	height: 0; 
-	background-color: #EDEDED; 
-	transition: 0.3s; 
-	z-index: -1;
-}
-`;
-
-const ErrorText = styled.small`
-	color: #AAA;
-	margin-bottom: -1rem;
-`;
-
-const ErrorP = styled.p`
-	color: #777;
-`;
-
-function Form({getHome, submitForm, provider, errorMessage, 
-	buttonState, setButtonState}) {
+const Form = React.memo(({getHome, submitForm, provider, errorMessage, 
+	buttonState, setButtonState}) => {
 
 	const [formData, setFormData] = useState({phone: "", amount: ""});
 
@@ -61,8 +40,6 @@ function Form({getHome, submitForm, provider, errorMessage,
 	}
 
 	function checkForm () {
-		console.log(formErrors);
-		console.log(buttonState);
 		if(buttonState.text === "Please Wait") {
 			return;
 		}
@@ -133,12 +110,10 @@ function Form({getHome, submitForm, provider, errorMessage,
 							mask="+7 (999) 999-99-99" 
 							clearErrors={clearErrors} />
 						<label>Phone Number</label>
-						<FocusBg className="focus-bg"></FocusBg>
+						<FocusBg />
 					</div>
 					{ formErrors.phone.length > 0 ?
-					<ErrorText className="f6 black-60 db mt1">
-						{formErrors.phone}
-					</ErrorText>
+					<ErrorText message={formErrors.phone} />
 					: null }
 				</div>
 				<div className="mt4 mb1">
@@ -147,12 +122,10 @@ function Form({getHome, submitForm, provider, errorMessage,
 						error={formErrors.amount} 
 							mask="Rub 999" clearErrors={clearErrors} />
 						<label>Amount</label>
-						<FocusBg className="focus-bg"></FocusBg>
+						<FocusBg />
 					</div>
 					{ formErrors.amount.length > 0 ?
-					<ErrorText className="f6 black-60 db mt1 mb1">
-						{formErrors.amount}
-					</ErrorText>
+					<ErrorText message={formErrors.amount} />
 					: null }
 				</div>
 			</form>
@@ -171,15 +144,12 @@ function Form({getHome, submitForm, provider, errorMessage,
 			</button>
 			}
 			{ errorMessage.length > 0 ?
-			<ErrorP className="mt0 f6" title="There was an error. Try Again">
-				{errorMessage}
-			</ErrorP>
-
+			<ErrorP errorMessage={errorMessage} />
 			: null
 			}
 		</>
 	);
-}
+});
 
 // Receive state elements for that element
 const mapStateToProps = createStructuredSelector({
