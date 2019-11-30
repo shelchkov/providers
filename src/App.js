@@ -27,7 +27,6 @@ class App extends React.PureComponent {
   }
 
 
-
   selectProvider = (provider) => {
     this.setState({
       selectedProvider: provider,

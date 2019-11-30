@@ -40,8 +40,6 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 	}
 
 	function checkForm () {
-		console.log(formErrors);
-		console.log(buttonState);
 		if(buttonState.text === "Please Wait") {
 			return;
 		}
