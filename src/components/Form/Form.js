@@ -77,11 +77,24 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 			amount: amountError
 		});
 		setButtonState(btnState);
+
+		return phoneError || amountError ? {
+			phone: phoneError,
+			amount: amountError
+		} : null;
 	}
 
 	function clearErrors() {
 		console.log("Clear");
 		setFormErrors({phone: "", amount: ""});
+	}
+
+	const handleEnterPress = (event) => {
+		if(event.keyCode === 13) {
+			if(!checkForm()) {
+				submitForm(formData);
+			}
+		}
 	}
 
 
@@ -108,7 +121,8 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 						<Input setInput={(data) => setForm("phone", data)} 
 							error={formErrors.phone} 
 							mask="+7 (999) 999-99-99" 
-							clearErrors={clearErrors} />
+							clearErrors={clearErrors} 
+							onKeyDown={handleEnterPress} />
 						<label>Phone Number</label>
 						<FocusBg />
 					</div>
@@ -119,8 +133,9 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 				<div className="mt4 mb1">
 					<div className="relative">
 						<Input setInput={(data) => setForm("amount", data)} 
-						error={formErrors.amount} 
-							mask="Rub 999" clearErrors={clearErrors} />
+						error={formErrors.amount} mask="Rub 999" 
+							clearErrors={clearErrors} 
+							onKeyDown={handleEnterPress} />
 						<label>Amount</label>
 						<FocusBg />
 					</div>
