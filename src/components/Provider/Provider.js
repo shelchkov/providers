@@ -44,7 +44,7 @@ const Provider = React.memo(({provider, selectProvider}) => {
 		<ProviderDiv className="ma3 br3 pa3 ml-auto mr-auto pointer bg-white overflow-hidden flex flex-column justify-center overflow-hidden" 
 			title={provider.name} onClick={clickHandler}>
 			<div>
-				<Logo src={provider.logo} alt="{provider.name}" />
+				<Logo src={provider.logo} alt={provider.name} />
 			</div>
 			<p>{provider.name}</p>
 		</ProviderDiv>
