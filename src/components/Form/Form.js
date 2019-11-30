@@ -90,10 +90,8 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 	}
 
 	const handleEnterPress = (event) => {
-		if(event.keyCode === 13) {
-			if(!checkForm()) {
-				submitForm(formData);
-			}
+		if(event.keyCode === 13 && !checkForm()) {
+			submitForm(formData);
 		}
 	}
 
