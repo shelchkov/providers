@@ -10,6 +10,32 @@ import { setButtonType } from '../../redux/button/button.actions';
 import FocusBg from './FocusBg';
 import ErrorP from './ErrorP';
 import ErrorText from './ErrorText';
+import styled from 'styled-components';
+
+const Button = styled.button`
+	outline: none;
+	opacity: .9;
+`;
+
+const ActiveBtn = styled(Button)`
+	&:hover, &:focus {
+		transform: scale(.96);
+		opacity: 1;
+		transition: transform .12s ease-out, opacity .12s ease-out;
+		box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
+	}
+`;
+
+const NotAllowedBtn = styled(Button)`
+	cursor: not-allowed;
+	color: #777;
+`;
+
+const GetBackBtn = styled(ActiveBtn)`
+	color: #333;
+	border-color: #CCC;
+`;
+
 
 const Form = React.memo(({getHome, submitForm, provider, errorMessage, 
 	buttonState, setButtonState}) => {
@@ -109,10 +135,10 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 
 			<div className="mb1">
 				<div className="flex items-start">
-					<button onClick={getHome} 
-						className="br3 ba ph3 pv2 mb2 pointer btn active get-back-btn bg-transparent">
+					<GetBackBtn onClick={getHome} 
+						className="br3 ba ph3 pv2 mb2 pointer active bg-transparent">
 						Get Back
-					</button>
+					</GetBackBtn>
 				</div>
 			</div>
 		
@@ -146,18 +172,18 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 				</div>
 			</form>
 			{ buttonState.text === "Check Info!" ?
-			<button onMouseOver={checkForm} 
+			<NotAllowedBtn onMouseOver={checkForm} 
 				title="Please Provide Correct Information"
-				className="btn br3 ba ph3 pv2 mb2 not-allowed center">
+				className="br3 ba ph3 pv2 mb2 center">
 				{buttonState.text}
-			</button>
+			</NotAllowedBtn>
 			:
-			<button onClick={() => submitForm(formData)} 
+			<ActiveBtn onClick={() => submitForm(formData)} 
 				onMouseOver={checkForm} 
-				className="btn br3 ba ph3 pv2 mb2 active pointer center" 
+				className="br3 ba ph3 pv2 mb2 pointer center" 
 				style={{background: buttonState.bgColor, color: buttonState.color}} >
 				{buttonState.text}
-			</button>
+			</ActiveBtn>
 			}
 			{ errorMessage.length > 0 ?
 			<ErrorP errorMessage={errorMessage} />
