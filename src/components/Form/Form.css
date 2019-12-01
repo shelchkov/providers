@@ -2,34 +2,6 @@
 	max-width: 240px;
 }
 
-.btn {
-	outline: none;
-	opacity: .9;
-}
-
-.btn.active:hover {
-	transform: scale(.96);
-	-webkit-transform: scale(.96);
-    -ms-transform: scale(.96);
-	opacity: 1;
-	transition: transform .12s ease-out, opacity .12s ease-out;
-	-webkit-transition: opacity .12s ease-out, -webkit-transform .12s ease-out;
-	-o-transition: transform .12s ease-out, opacity .12s ease-out;
-	-webkit-box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
-	-moz-box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
-	box-shadow: 0px 0px 38px -5px rgba(204,204,204,0.46);
-}
-
-.btn.not-allowed {
-	cursor: not-allowed;
-	color: #777;
-}
-
-.get-back-btn {
-	color: #333;
-	border-color: #CCC;
-}
-
 @media screen and (max-height: 400px) {
 	.logo {
 		width: 140px;
