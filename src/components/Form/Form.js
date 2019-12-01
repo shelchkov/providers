@@ -136,7 +136,7 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 			<div className="mb1">
 				<div className="flex items-start">
 					<GetBackBtn onClick={getHome} 
-						className="br3 ba ph3 pv2 mb2 pointer active bg-transparent">
+						className="br3 ba ph3 pv2 mb2 pointer bg-transparent">
 						Get Back
 					</GetBackBtn>
 				</div>
