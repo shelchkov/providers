@@ -72,9 +72,8 @@ class App extends React.PureComponent {
   }
 
   async requestInfo (formData) {
-    console.log(formData);
     if(formData.phone.length !== 11 || !formData.amount) {
-      throw new Error("Wrong Data was provided!");
+      throw new Error("Wrong Data provided!");
     }
     // Request Time: 900 - 2000ms
     let reqTime = Math.random() * 1100 + 900;

@@ -42,17 +42,6 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 		console.log(formData);
 	}
 
-	function clearErrors() {
-		console.log("Clear");
-		setFormErrors({phone: "", amount: ""});
-	}
-
-	const handleEnterPress = (event) => {
-		if(event.keyCode === 13 && !checkForm()) {
-			submitForm(formData);
-		}
-	}
-
 	function checkForm () {
 		if(buttonState.text === "Please Wait") {
 			return;
@@ -96,6 +85,17 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 			phone: phoneError,
 			amount: amountError
 		} : null;
+	}
+
+	function clearErrors() {
+		console.log("Clear");
+		setFormErrors({phone: "", amount: ""});
+	}
+
+	const handleEnterPress = (event) => {
+		if(event.keyCode === 13 && !checkForm()) {
+			submitForm(formData);
+		}
 	}
 
 
