@@ -30,24 +30,24 @@ class App extends React.PureComponent {
   selectProvider = (provider) => {
     this.setState({
       selectedProvider: provider,
-      errorMessage: "",
-      btnState: { text: "Submit", bgColor: "#58AF9B", color: "#F0F4F3" }
+      errorMessage: ""
     });
     this.props.setButtonState({ text: "Submit", bgColor: "#58AF9B", color: "#F0F4F3" });
     this.cover("form");
   }
 
   submitForm = (formData) => {
+    this.props.setButtonState(btnStates.wait);
     this.requestInfo(formData)
       .then(res => {
         console.log(res);
         this.getHome("home");
+        this.props.setButtonState(btnStates.success);
       })
       .catch(error => {
         console.log("Error: " + error.message);
         this.setState({
           errorMessage: error.message,
-          btnState: btnStates.error
         });
         this.props.setButtonState(btnStates.error);
       });
