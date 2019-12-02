@@ -6,7 +6,8 @@ import CoverHide from './components/CoverHide/CoverHide';
 import Form from './components/Form/Form';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
-// import { createStructuredSelector } from 'reselect';
+import { createStructuredSelector } from 'reselect';
+import { selectBtnState } from './redux/button/button.selectors';
 import { setButtonType } from './redux/button/button.actions';
 import btnStates from './buttonStates';
 
@@ -37,6 +38,10 @@ class App extends React.PureComponent {
   }
 
   submitForm = (formData) => {
+    if(this.props.buttonState.text === "Please Wait" || 
+      this.props.buttonState.text === "Success") {
+      return;
+    }
     this.props.setButtonState(btnStates.wait);
     this.requestInfo(formData)
       .then(res => {
@@ -124,8 +129,12 @@ class App extends React.PureComponent {
   }
 }
 
+const mapStateToProps = createStructuredSelector({
+  buttonState: selectBtnState
+});
+
 const mapDispatchToProps = dispatch => ({
   setButtonState: (button) => dispatch(setButtonType(button))
 });
 
-export default connect(null, mapDispatchToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
