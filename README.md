@@ -2,13 +2,13 @@
 
 App for paying for your phone.
 
-check out [Demo](http://bravedevs.epizy.com/ "Demo").
+Check out [Demo](http://bravedevs.epizy.com/ "Demo").
 
 List of providers:
 
 ![Providers](https://raw.githubusercontent.com/shelchkov/providers/master/examples/providers.PNG)
 
-Form for phone and amount:
+Form for phone number and amount:
 
 ![Megafon](https://raw.githubusercontent.com/shelchkov/providers/master/examples/megafon.PNG)
 
