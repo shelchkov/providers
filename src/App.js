@@ -110,7 +110,8 @@ class App extends React.PureComponent {
         <ProvidersList selectProvider={this.selectProvider} />
         :
         <Form getHome={this.getHome} submitForm={this.submitForm} 
-          provider={this.state.selectedProvider} errorMessage={this.state.errorMessage} 
+          provider={this.state.selectedProvider} 
+          errorMessage={this.state.errorMessage} 
           /> 
         }
         { this.state.showCover ? 
