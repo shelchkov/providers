@@ -124,6 +124,10 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 		}
 	}
 
+	const handleFormSubmit = () => {
+		submitForm(formData);
+	}
+
 
 	return (
 		<>
@@ -172,14 +176,15 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 				</div>
 			</form>
 			{ buttonState.text === "Check Info!" ?
-			<NotAllowedBtn onMouseOver={checkForm} 
+			<NotAllowedBtn onMouseOver={checkForm} onFocus={checkForm}
 				title="Please Provide Correct Information"
-				className="br3 ba ph3 pv2 mb2 center">
+				className="br3 ba ph3 pv2 mb2 center" 
+				onKeyDown={handleEnterPress}>
 				{buttonState.text}
 			</NotAllowedBtn>
 			:
-			<ActiveBtn onClick={() => submitForm(formData)} 
-				onMouseOver={checkForm} 
+			<ActiveBtn onClick={handleFormSubmit} 
+				onMouseOver={checkForm} onFocus={checkForm}
 				className="br3 ba ph3 pv2 mb2 pointer center" 
 				style={{background: buttonState.bgColor, color: buttonState.color}} >
 				{buttonState.text}
