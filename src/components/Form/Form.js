@@ -185,7 +185,7 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 				{buttonState.text}
 			</ActiveBtn>
 			}
-			{ errorMessage.length > 0 ?
+			{ errorMessage.length > 0 && buttonState.text === "Error" ?
 			<ErrorP errorMessage={errorMessage} />
 			: null
 			}
