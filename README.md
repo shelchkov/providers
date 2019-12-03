@@ -1,6 +1,6 @@
-# providers
+# Payp
 
-App for paying for your phone.
+App for paying your phone bills.
 
 Check out [Demo](http://bravedevs.epizy.com/ "Demo").
 
