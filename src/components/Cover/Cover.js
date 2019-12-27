@@ -1,5 +1,4 @@
 import React from 'react';
-// import './Cover.css';
 // import { useSpring, animated } from 'react-spring';
 import styled from "styled-components";
 
@@ -15,12 +14,8 @@ const CoverContainer = styled.div`
 	transition: top .8s ease-in-out, bottom .5s ease-in-out;
 `;
 
-function Cover({ top, bottom }) {
-	console.log("Cover");
-
-	return (
-		<CoverContainer top={top} bottom={bottom}/>
-	);
-}
+const Cover = ({ top, bottom }) => (
+	<CoverContainer top={top} bottom={bottom}/>
+);
 
 export default Cover;
