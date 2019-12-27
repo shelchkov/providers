@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const ErrorTextSmall = styled.small`
 	color: #AAA;
-	margin-bottom: -1rem;
+	margin-bottom: -.3rem;
 `;
 
 const ErrorText = React.memo(({message}) => {

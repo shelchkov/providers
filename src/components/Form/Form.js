@@ -147,7 +147,7 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 			</div>
 		
 			<form className="flex flex-column mb3">
-				<div className="mt3">
+				<div style={{ marginTop: "1.1rem" }}>
 					<div className="relative">
 						<Input setInput={(data) => setForm("phone", data)} 
 							error={formErrors.phone} 
@@ -161,7 +161,7 @@ const Form = React.memo(({getHome, submitForm, provider, errorMessage,
 					<ErrorText message={formErrors.phone} />
 					: null }
 				</div>
-				<div className="mt4 mb1">
+				<div className="mb1" style={{ marginTop: "1.65rem" }}>
 					<div className="relative">
 						<Input setInput={(data) => setForm("amount", data)} 
 						error={formErrors.amount} mask="Rub 999" 
