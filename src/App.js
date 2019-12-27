@@ -1,8 +1,6 @@
 import React from 'react';
 import './App.css';
 import ProvidersList from './components/ProvidersList/ProvidersList';
-import Cover from './components/Cover/Cover';
-import CoverHide from './components/CoverHide/CoverHide';
 import Form from './components/Form/Form';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -10,6 +8,7 @@ import { createStructuredSelector } from 'reselect';
 import { selectBtnState } from './redux/button/button.selectors';
 import { setButtonType } from './redux/button/button.actions';
 import btnStates from './buttonStates';
+import ScreenHover from "./components/ScreenHover/ScreenHover";
 
 const AppDiv = styled.div`
   text-align: center;
@@ -21,8 +20,8 @@ class App extends React.PureComponent {
     this.state = {
       route: "home", // "home", "form"
       selectedProvider: {},
-      showCover: false,
-      hideCover: false,
+      coverUp: false,
+      coverShow: false,
       errorMessage: ""
     };
   }
@@ -59,20 +58,20 @@ class App extends React.PureComponent {
   }
 
   cover = (route) => {
-    this.setState({
-      showCover: true
-    });
+    this.setState({ coverShow: true });
+
     setTimeout(() => {
-      this.setState({
-        showCover: false,
-        hideCover: true,
-        route: route
-      });
-    }, 1000);
+      this.setState({ coverUp: true });
+    }, 0);
+
+    // Move cover up and open the screen
     setTimeout(() => {
-      this.setState({
-        hideCover: false
-      });
+      this.setState({ coverShow: false, route });
+    }, 1100);
+
+    // Stop showing cover
+    setTimeout(() => {
+      this.setState({ coverUp: false });
     }, 2000);
   }
 
@@ -109,6 +108,7 @@ class App extends React.PureComponent {
 
 
   render() {
+    console.log(this.state);
     return (
       <AppDiv>
         { this.state.route === "home" ? 
@@ -119,12 +119,8 @@ class App extends React.PureComponent {
           errorMessage={this.state.errorMessage} 
           /> 
         }
-        { this.state.showCover ? 
-        <Cover /> 
-        : null }
-        { this.state.hideCover ? 
-        <CoverHide/> 
-        : null }
+        {(this.state.coverShow || this.state.coverUp) && <ScreenHover 
+          coverUp={this.state.coverUp} coverShow={this.state.coverShow} />}
       </AppDiv>
     );
   }
