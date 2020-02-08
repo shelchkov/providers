@@ -58,24 +58,20 @@ class App extends React.PureComponent {
   }
 
   cover = (route) => {
-    console.log("Route Change");
     this.setState({ coverShow: true });
 
     setTimeout(() => {
-      console.log(" CoverUp");
       this.setState({ coverUp: true });
     }, 0);
 
     // Move cover up and open the screen
     setTimeout(() => {
-      console.log("  Cover");
       this.setState({ coverShow: false });
       this.props.history.push(`/${route === "home" ? "" : route}`);
     }, 1100);
 
     // Stop showing cover
     setTimeout(() => {
-      console.log("  Stop Showing Cover");
       this.setState({ coverUp: false });
     }, 2000);
   }
@@ -113,7 +109,6 @@ class App extends React.PureComponent {
 
 
   render() {
-    console.warn("Render");
     return (
       <AppDiv>
         <Switch>
