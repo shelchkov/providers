@@ -19,7 +19,6 @@ class App extends React.PureComponent {
   constructor() {
     super();
     this.state = {
-      route: "home", // "home", "form"
       selectedProvider: {},
       coverUp: false,
       coverShow: false,
@@ -70,8 +69,8 @@ class App extends React.PureComponent {
     // Move cover up and open the screen
     setTimeout(() => {
       console.log("  Cover");
-      this.setState({ coverShow: false, route });
-      this.props.history.push(`/${route}`);
+      this.setState({ coverShow: false });
+      this.props.history.push(`/${route === "home" ? "" : route}`);
     }, 1100);
 
     // Stop showing cover
@@ -109,7 +108,7 @@ class App extends React.PureComponent {
   }
 
   getHome = () => {
-    this.cover("");
+    this.cover("home");
   }
 
 
