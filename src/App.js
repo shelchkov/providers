@@ -9,6 +9,7 @@ import { selectBtnState } from './redux/button/button.selectors';
 import { setButtonType } from './redux/button/button.actions';
 import btnStates from './buttonStates';
 import ScreenHover from "./components/ScreenHover/ScreenHover";
+import { Switch, Route, withRouter } from "react-router-dom";
 
 const AppDiv = styled.div`
   text-align: center;
@@ -58,19 +59,24 @@ class App extends React.PureComponent {
   }
 
   cover = (route) => {
+    console.log("Route Change");
     this.setState({ coverShow: true });
 
     setTimeout(() => {
+      console.log(" CoverUp");
       this.setState({ coverUp: true });
     }, 0);
 
     // Move cover up and open the screen
     setTimeout(() => {
+      console.log("  Cover");
       this.setState({ coverShow: false, route });
+      this.props.history.push(`/${route}`);
     }, 1100);
 
     // Stop showing cover
     setTimeout(() => {
+      console.log("  Stop Showing Cover");
       this.setState({ coverUp: false });
     }, 2000);
   }
@@ -103,21 +109,24 @@ class App extends React.PureComponent {
   }
 
   getHome = () => {
-    this.cover("home");
+    this.cover("");
   }
 
 
   render() {
+    console.warn("Render");
     return (
       <AppDiv>
-        { this.state.route === "home" ? 
-        <ProvidersList selectProvider={this.selectProvider} />
-        :
-        <Form getHome={this.getHome} submitForm={this.submitForm} 
-          provider={this.state.selectedProvider} 
-          errorMessage={this.state.errorMessage} 
-          /> 
-        }
+        <Switch>
+          <Route exact path="/" render={() => 
+            <ProvidersList selectProvider={this.selectProvider} />
+          } />
+          <Route exact path="/form" render={() => 
+            <Form getHome={this.getHome} submitForm={this.submitForm} 
+              provider={this.state.selectedProvider} 
+              errorMessage={this.state.errorMessage} /> 
+          } />
+        </Switch>
         {(this.state.coverShow || this.state.coverUp) && <ScreenHover 
           coverUp={this.state.coverUp} coverShow={this.state.coverShow} />}
       </AppDiv>
@@ -133,4 +142,4 @@ const mapDispatchToProps = dispatch => ({
   setButtonState: (button) => dispatch(setButtonType(button))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
