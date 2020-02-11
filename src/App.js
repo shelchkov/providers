@@ -9,6 +9,7 @@ import { selectBtnState } from './redux/button/button.selectors';
 import { setButtonType } from './redux/button/button.actions';
 import btnStates from './buttonStates';
 import ScreenHover from "./components/ScreenHover/ScreenHover";
+import { Switch, Route, withRouter } from "react-router-dom";
 
 const AppDiv = styled.div`
   text-align: center;
@@ -18,7 +19,6 @@ class App extends React.PureComponent {
   constructor() {
     super();
     this.state = {
-      route: "home", // "home", "form"
       selectedProvider: {},
       coverUp: false,
       coverShow: false,
@@ -66,7 +66,8 @@ class App extends React.PureComponent {
 
     // Move cover up and open the screen
     setTimeout(() => {
-      this.setState({ coverShow: false, route });
+      this.setState({ coverShow: false });
+      this.props.history.push(`/${route === "home" ? "" : route}`);
     }, 1100);
 
     // Stop showing cover
@@ -110,14 +111,16 @@ class App extends React.PureComponent {
   render() {
     return (
       <AppDiv>
-        { this.state.route === "home" ? 
-        <ProvidersList selectProvider={this.selectProvider} />
-        :
-        <Form getHome={this.getHome} submitForm={this.submitForm} 
-          provider={this.state.selectedProvider} 
-          errorMessage={this.state.errorMessage} 
-          /> 
-        }
+        <Switch>
+          <Route exact path="/" render={() => 
+            <ProvidersList selectProvider={this.selectProvider} />
+          } />
+          <Route exact path="/form" render={() => 
+            <Form getHome={this.getHome} submitForm={this.submitForm} 
+              provider={this.state.selectedProvider} 
+              errorMessage={this.state.errorMessage} /> 
+          } />
+        </Switch>
         {(this.state.coverShow || this.state.coverUp) && <ScreenHover 
           coverUp={this.state.coverUp} coverShow={this.state.coverShow} />}
       </AppDiv>
@@ -133,4 +136,4 @@ const mapDispatchToProps = dispatch => ({
   setButtonState: (button) => dispatch(setButtonType(button))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(App);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(App));
