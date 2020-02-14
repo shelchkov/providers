@@ -35,20 +35,14 @@ const ProviderDiv = styled.div`
 	}
 `;
 
-const Provider = React.memo(({provider, selectProvider}) => {
-	const clickHandler = () => {
-		selectProvider(provider)
-	}
-
-	return (
-		<ProviderDiv className="ma3 br3 pa3 ml-auto mr-auto pointer bg-white overflow-hidden flex flex-column justify-center overflow-hidden" 
-			title={provider.name} onClick={clickHandler}>
-			<div>
-				<Logo src={provider.logo} alt={provider.name} />
-			</div>
-			<p>{provider.name}</p>
-		</ProviderDiv>
-	);
-})
+const Provider = React.memo(({ provider, selectProvider }) => (
+	<ProviderDiv className="ma3 br3 pa3 ml-auto mr-auto pointer bg-white overflow-hidden flex flex-column justify-center overflow-hidden" 
+		title={provider.name} onClick={() => selectProvider(provider.id)}>
+		<div>
+			<Logo src={provider.logo} alt={provider.name} />
+		</div>
+		<p>{provider.name}</p>
+	</ProviderDiv>
+))
 
 export default Provider;

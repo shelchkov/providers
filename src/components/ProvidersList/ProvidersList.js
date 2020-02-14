@@ -2,19 +2,11 @@ import React from 'react';
 import Provider from '../Provider/Provider';
 import providers from '../../providersList';
 
-function ProvidersList({selectProvider}) {
-
-	const providersList = providers.map((item, i) => {
-		return (
-			<Provider key={i} provider={item} selectProvider={selectProvider}/>
-		);
-	});
-
-	return (
-		<div>
-			{providersList}
-		</div>
-	);
-}
-
-export default ProvidersList;
+export const ProvidersList = ({ selectProvider }) => (
+	<div>
+		{providers.map(item =>
+			<Provider key={item.id} provider={item} 
+				selectProvider={selectProvider} />
+		)}
+	</div>
+)

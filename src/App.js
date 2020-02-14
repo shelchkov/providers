@@ -1,6 +1,6 @@
 import React from 'react';
 import './App.css';
-import ProvidersList from './components/ProvidersList/ProvidersList';
+import { ProvidersList } from './components/ProvidersList/ProvidersList';
 import Form from './components/Form/Form';
 import styled from 'styled-components';
 import { connect } from 'react-redux';
@@ -10,6 +10,8 @@ import { setButtonType } from './redux/button/button.actions';
 import btnStates from './buttonStates';
 import ScreenHover from "./components/ScreenHover/ScreenHover";
 import { Switch, Route, withRouter } from "react-router-dom";
+
+import providers from "./providersList";
 
 const AppDiv = styled.div`
   text-align: center;
@@ -27,11 +29,13 @@ class App extends React.PureComponent {
   }
 
 
-  selectProvider = (provider) => {
-    this.setState({
-      selectedProvider: provider,
-      errorMessage: ""
-    });
+  setProvider = (providerId) => {
+    const selectedProvider = providers.find(provider => provider.id === providerId);
+    this.setState({ selectedProvider, errorMessage: "" });
+  }
+
+  selectProvider = (providerId) => {
+    this.setProvider(providerId);
     this.props.setButtonState({ text: "Submit", bgColor: "#58AF9B", color: "#F0F4F3" });
     this.cover("form");
   }
@@ -45,7 +49,7 @@ class App extends React.PureComponent {
     this.requestInfo(formData)
       .then(res => {
         console.log(res);
-        this.getHome("home");
+        this.getHome();
         this.props.setButtonState(btnStates.success);
       })
       .catch(error => {
@@ -67,7 +71,7 @@ class App extends React.PureComponent {
     // Move cover up and open the screen
     setTimeout(() => {
       this.setState({ coverShow: false });
-      this.props.history.push(`/${route === "home" ? "" : route}`);
+      this.props.history.push(route === "home" ? "" : `${route}?provider=${this.state.selectedProvider.id}`);
     }, 1100);
 
     // Stop showing cover
@@ -81,8 +85,8 @@ class App extends React.PureComponent {
       throw new Error("Wrong Data provided!");
     }
     // Request Time: 900 - 2000ms
-    let reqTime = Math.random() * 1100 + 900;
-    let result = await new Promise((resolve, reject) => {
+    const reqTime = Math.random() * 1100 + 900;
+    const result = await new Promise((resolve, reject) => {
       setTimeout(() => {
         if(Math.random() < .5) {
           resolve(
@@ -118,7 +122,8 @@ class App extends React.PureComponent {
           <Route exact path="/form" render={() => 
             <Form getHome={this.getHome} submitForm={this.submitForm} 
               provider={this.state.selectedProvider} 
-              errorMessage={this.state.errorMessage} /> 
+              errorMessage={this.state.errorMessage} 
+              setProvider={this.setProvider} /> 
           } />
         </Switch>
         {(this.state.coverShow || this.state.coverUp) && <ScreenHover 
