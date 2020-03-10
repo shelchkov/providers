@@ -11,6 +11,7 @@ import FocusBg from './FocusBg';
 import ErrorP from './ErrorP';
 import ErrorText from './ErrorText';
 import styled from 'styled-components';
+import { withRouter } from "react-router-dom";
 
 const Button = styled.button`
 	outline: none;
@@ -36,9 +37,26 @@ const GetBackBtn = styled(ActiveBtn)`
 	border-color: #CCC;
 `;
 
+const extractSearchValue = (search, name) => {
+	const value = search.replace("?", "")
+		.split("&").map(value => value.split("="))
+		.find(value => value[0] === name)
 
-const Form = React.memo(({getHome, submitForm, provider, errorMessage, 
-	buttonState, setButtonState}) => {
+	return value && value[1]
+}
+
+
+const Form = React.memo(({ getHome, submitForm, provider, errorMessage, 
+	buttonState, setButtonState, history, setProvider }) => {
+
+	if (!provider.id) {
+		const search = history.location.search;
+		const selectedProviderId = search && 
+			extractSearchValue(search, "provider");
+		if (selectedProviderId) {
+			setProvider(parseInt(selectedProviderId));
+		}
+	}
 
 	const [formData, setFormData] = useState({phone: "", amount: ""});
 
@@ -208,4 +226,4 @@ const mapDispatchToProps = dispatch => ({
   setButtonState: (button) => dispatch(setButtonType(button))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormContainer(Form));
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(FormContainer(Form)));
