@@ -3,22 +3,22 @@
   "name": "Providers",
   "icons": [
     {
-      "src": "favicon.ico",
+      "src": "images/icons/favicon.ico",
       "sizes": "16x16",
       "type": "image/x-icon"
     },
     {
-      "src": "favicon-96x96.png",
+      "src": "images/icons/favicon-96x96.png",
       "type": "image/png",
       "sizes": "96x96"
     },
     {
-      "src": "apple-icon-180x180.png",
+      "src": "images/icons/apple-icon-180x180.png",
       "type": "image/png",
       "sizes": "180x180"
     }
   ],
-  "start_url": ".",
+  "start_url": "/",
   "display": "standalone",
   "theme_color": "#4B4F4E",
   "background_color": "#F0F4F3"
