@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import './Form.css';
 import Input from '../Input/Input';
 import FormContainer from '../FormContainer/FormContainer';
-import btnStates from '../../buttonStates';
 import { connect } from 'react-redux';
 import { selectBtnState } from '../../redux/button/button.selectors';
 import { createStructuredSelector } from 'reselect';
@@ -93,7 +92,7 @@ const Form = React.memo(({ getHome, submitForm, provider, errorMessage,
 
 		let phoneError = "";
 		let amountError = "";
-		let btnState = btnStates.check;
+		let btnState = "check";
 
 		// Phone Validation
 		if(formData.phone.length === 0) {
@@ -107,13 +106,13 @@ const Form = React.memo(({ getHome, submitForm, provider, errorMessage,
 		
 		} else {
 			phoneError = "";
-			btnState = btnStates.submit;
+			btnState = "submit";
 		}
 
 		// Amount Validation
 		if(formData.amount < 1) {
 			amountError = "You can choose amount that lies between 1 and 1000 rubles";
-			btnState = btnStates.check;
+			btnState = "check";
 
 		} else {
 			amountError = "";
