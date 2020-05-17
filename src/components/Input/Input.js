@@ -8,9 +8,9 @@ const InputContainer = styled.div`
 	position: relative;
 `
 
-export const Input = ({ label, ...inputProps }) => (
+export const Input = ({ label, error, ...inputProps }) => (
 	<InputContainer>
-		<InputBase {...inputProps} />
+		<InputBase error={error} {...inputProps} />
 		<label>{label}</label>
 		<FocusBg />
 	</InputContainer>

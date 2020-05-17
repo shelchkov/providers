@@ -7,7 +7,7 @@ import { selectBtnState } from '../../redux/button/button.selectors';
 import { createStructuredSelector } from 'reselect';
 import { setButtonType } from '../../redux/button/button.actions';
 import ErrorP from './ErrorP';
-import ErrorText from './ErrorText';
+import { ErrorText } from './ErrorText';
 import styled from 'styled-components';
 import { withRouter } from "react-router-dom";
 
