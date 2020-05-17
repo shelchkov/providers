@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import './Form.css';
-import Input from '../Input/Input';
+import { Input } from '../Input/Input';
 import FormContainer from '../FormContainer/FormContainer';
 import btnStates from '../../buttonStates';
 import { connect } from 'react-redux';
