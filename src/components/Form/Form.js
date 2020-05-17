@@ -7,7 +7,6 @@ import { selectBtnState } from '../../redux/button/button.selectors';
 import { createStructuredSelector } from 'reselect';
 import { setButtonType } from '../../redux/button/button.actions';
 import ErrorP from './ErrorP';
-import { ErrorText } from './ErrorText';
 import styled from 'styled-components';
 import { withRouter } from "react-router-dom";
 
@@ -174,9 +173,6 @@ const Form = React.memo(({ getHome, submitForm, provider, errorMessage,
 						clearErrors={clearErrors}
 						onKeyDown={handleEnterPress}
 					/>
-					{ formErrors.phone.length > 0 ?
-					<ErrorText message={formErrors.phone} />
-					: null }
 				</div>
 				<div className="mb1" style={{ marginTop: "1.65rem" }}>
 					<Input
@@ -186,10 +182,6 @@ const Form = React.memo(({ getHome, submitForm, provider, errorMessage,
 						clearErrors={clearErrors}
 						onKeyDown={handleEnterPress}
 					/>
-					
-					{ formErrors.amount.length > 0 ?
-					<ErrorText message={formErrors.amount} />
-					: null }
 				</div>
 			</form>
 			{ buttonState.text === "Check Info!" ?
