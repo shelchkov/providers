@@ -20,7 +20,6 @@ export const InputBase = ({
 	const className = `bg-transparent${hasContent ?
 		" has-content" : ""}${error ? " error" : ""}`
 	const handleFocus = error ? clearErrors : undefined
-	console.log(hasContent, error, className, !!handleFocus)
 
 	return (
 		<InputMask
