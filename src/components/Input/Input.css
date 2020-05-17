@@ -3,6 +3,7 @@ input {
 	padding: 7px 15px;
 
 	color: #4B4F4E;
+	background: transparent;
 	border: 1px solid #CCC;
 	
 	font-size: 15px !important;

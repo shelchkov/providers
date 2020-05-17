@@ -17,8 +17,8 @@ export const InputBase = ({
 		setInput(value);
 	}
 
-	const className = `bg-transparent${hasContent ?
-		" has-content" : ""}${error ? " error" : ""}`
+	const className = `${hasContent ?
+		"has-content" : ""}${error ? " error" : ""}`
 	const handleFocus = error ? clearErrors : undefined
 
 	return (
