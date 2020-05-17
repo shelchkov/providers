@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import InputMask from 'react-input-mask'
 import './Input.css'
 
-export const Input = ({
+export const InputBase = ({
 	setInput,
 	error,
 	mask,

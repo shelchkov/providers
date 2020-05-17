@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import './Form.css';
-import { Input } from '../Input/Input';
+import { InputBase as Input } from '../Input/InputBase';
 import FormContainer from '../FormContainer/FormContainer';
 import btnStates from '../../buttonStates';
 import { connect } from 'react-redux';
 import { selectBtnState } from '../../redux/button/button.selectors';
 import { createStructuredSelector } from 'reselect';
 import { setButtonType } from '../../redux/button/button.actions';
-import FocusBg from './FocusBg';
+import { FocusBg } from './FocusBg';
 import ErrorP from './ErrorP';
 import ErrorText from './ErrorText';
 import styled from 'styled-components';
