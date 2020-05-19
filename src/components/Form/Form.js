@@ -1,16 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './Form.css';
-import Input from '../Input/Input';
 import FormContainer from '../FormContainer/FormContainer';
 import { connect } from 'react-redux';
 import { selectBtnState } from '../../redux/button/button.selectors';
 import { createStructuredSelector } from 'reselect';
 import { setButtonType } from '../../redux/button/button.actions';
-import FocusBg from './FocusBg';
 import ErrorP from './ErrorP';
-import ErrorText from './ErrorText';
 import styled from 'styled-components';
 import { withRouter } from "react-router-dom";
+
+import { Input } from "../Input/Input"
 
 const Button = styled.button`
 	outline: none;
@@ -165,31 +164,23 @@ const Form = React.memo(({ getHome, submitForm, provider, errorMessage,
 		
 			<form className="flex flex-column mb3">
 				<div style={{ marginTop: "1.1rem" }}>
-					<div className="relative">
-						<Input setInput={(data) => setForm("phone", data)} 
-							error={formErrors.phone} 
-							mask="+7 (999) 999-99-99" 
-							clearErrors={clearErrors} 
-							onKeyDown={handleEnterPress} />
-						<label>Phone Number</label>
-						<FocusBg />
-					</div>
-					{ formErrors.phone.length > 0 ?
-					<ErrorText message={formErrors.phone} />
-					: null }
+					<Input
+						label="Phone Number"
+						setInput={(data) => setForm("phone", data)}
+						error={formErrors.phone}
+						mask="+7 (999) 999-99-99"
+						clearErrors={clearErrors}
+						onKeyDown={handleEnterPress}
+					/>
 				</div>
 				<div className="mb1" style={{ marginTop: "1.65rem" }}>
-					<div className="relative">
-						<Input setInput={(data) => setForm("amount", data)} 
-						error={formErrors.amount} mask="Rub 999" 
-							clearErrors={clearErrors} 
-							onKeyDown={handleEnterPress} />
-						<label>Amount</label>
-						<FocusBg />
-					</div>
-					{ formErrors.amount.length > 0 ?
-					<ErrorText message={formErrors.amount} />
-					: null }
+					<Input
+						label="Amount"
+						setInput={(data) => setForm("amount", data)}
+						error={formErrors.amount} mask="Rub 999"
+						clearErrors={clearErrors}
+						onKeyDown={handleEnterPress}
+					/>
 				</div>
 			</form>
 			{ buttonState.text === "Check Info!" ?

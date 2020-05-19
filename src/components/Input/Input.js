@@ -1,48 +1,22 @@
-import React from 'react';
-import './Input.css';
-import InputMask from 'react-input-mask';
+import React from "react"
+import styled from "styled-components"
 
-function Input({setInput, error, mask, clearErrors, ...other}) {
+import { InputBase } from "./InputBase"
+import { FocusBg } from "./FocusBg"
+import { ErrorText } from "./ErrorText"
 
-	const [hasContent, setHasContent] = React.useState(false);
+const InputContainer = styled.div`
+	position: relative;
+`
 
-	function inputChange(event) {
-		if(event.target.value.length > 0) {
-			setHasContent(true);
-		} else {
-			setHasContent(false);
-		}
-		setInput(event.target.value);
-	}
-
-	if(hasContent) {
-		if(error.length > 0) {
-			return (
-				<InputMask mask={mask} onChange={inputChange}
-					className="bg-transparent has-content error" 
-					onFocus={clearErrors} {...other} />
-			);
-		} else {
-			return (
-				<InputMask mask={mask} onChange={inputChange}
-					className="bg-transparent has-content" 
-					{...other} />
-			);
-		}
-	} else {
-		if(error.length > 0) {
-			return (
-				<InputMask mask={mask} onChange={inputChange}
-					className="bg-transparent error" onFocus={clearErrors} 
-					{...other} />
-			);
-		} else {
-			return (
-				<InputMask mask={mask} onChange={inputChange}
-					className="bg-transparent" {...other} />
-			);
-		}
-	}
-}
-
-export default Input;
+export const Input = ({ label, error, ...inputProps }) => (
+	<>
+		<InputContainer>
+			<InputBase error={error} {...inputProps} />
+			<label>{label}</label>
+			<FocusBg />
+		</InputContainer>
+		
+		{error && <ErrorText message={error} />}
+	</>
+)
