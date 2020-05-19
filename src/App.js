@@ -7,7 +7,6 @@ import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { selectBtnState } from './redux/button/button.selectors';
 import { setButtonType } from './redux/button/button.actions';
-import btnStates from './buttonStates';
 import ScreenHover from "./components/ScreenHover/ScreenHover";
 import { Switch, Route, withRouter } from "react-router-dom";
 
@@ -36,7 +35,7 @@ class App extends React.PureComponent {
 
   selectProvider = (providerId) => {
     this.setProvider(providerId);
-    this.props.setButtonState({ text: "Submit", bgColor: "#58AF9B", color: "#F0F4F3" });
+    this.props.setButtonState("submit");
     this.cover("form");
   }
 
@@ -45,19 +44,19 @@ class App extends React.PureComponent {
       this.props.buttonState.text === "Success") {
       return;
     }
-    this.props.setButtonState(btnStates.wait);
+    this.props.setButtonState("wait");
     this.requestInfo(formData)
       .then(res => {
         console.log(res);
         this.getHome();
-        this.props.setButtonState(btnStates.success);
+        this.props.setButtonState("success");
       })
       .catch(error => {
         console.log("Error: " + error.message);
         this.setState({
           errorMessage: error.message,
         });
-        this.props.setButtonState(btnStates.error);
+        this.props.setButtonState("error");
       });
   }
 
