@@ -4,6 +4,8 @@
   "private": true,
   "homepage": "http://bravedevs.epizy.com/",
   "dependencies": {
+    "eslint": "^7.0.0",
+    "eslint-plugin-react": "^7.20.0",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
     "react-input-mask": "^2.0.4",
@@ -20,7 +22,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint src/**/*.js"
   },
   "eslintConfig": {
     "extends": "react-app"
