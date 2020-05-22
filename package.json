@@ -52,6 +52,6 @@
     }
   },
   "lint-staged": {
-    "*.js": ["npm lint", "npm format"]
+    "*.js": ["eslint --fix", "prettier --write"]
   }
 }
