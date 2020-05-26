@@ -37,8 +37,8 @@ const GetBackBtn = styled(ActiveBtn)`
 
 const extractSearchValue = (search, name) => {
 	const value = search.replace("?", "")
-		.split("&").map(value => value.split("="))
-		.find(value => value[0] === name)
+		.split("&").map(pair => pair.split("="))
+		.find(key => key[0] === name)
 
 	return value && value[1]
 }
@@ -104,7 +104,6 @@ const Form = React.memo(({ getHome, submitForm, provider, errorMessage,
 			phoneError = "Phone number should contain exactly 11 digits";
 		
 		} else {
-			phoneError = "";
 			btnState = "submit";
 		}
 
@@ -113,8 +112,6 @@ const Form = React.memo(({ getHome, submitForm, provider, errorMessage,
 			amountError = "You can choose amount that lies between 1 and 1000 rubles";
 			btnState = "check";
 
-		} else {
-			amountError = "";
 		}
 
 		setFormErrors({

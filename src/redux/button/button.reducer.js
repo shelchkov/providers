@@ -1,5 +1,5 @@
 import { buttonActionTypes } from './button.types';
-import buttonStates from "../../utils/button-states"
+import { buttonStates } from "../../utils/button-states"
 
 const INITIAL_STATE = {
 	btnState: buttonStates.submit

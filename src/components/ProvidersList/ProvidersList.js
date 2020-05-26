@@ -1,10 +1,10 @@
 import React from 'react';
 import Provider from '../Provider/Provider';
-import providers from '../../providersList';
+import { providersList } from '../../utils/providers-list';
 
 export const ProvidersList = ({ selectProvider }) => (
 	<div>
-		{providers.map(item =>
+		{providersList.map(item =>
 			<Provider key={item.id} provider={item} 
 				selectProvider={selectProvider} />
 		)}

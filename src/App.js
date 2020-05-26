@@ -10,7 +10,7 @@ import { setButtonType } from './redux/button/button.actions';
 import ScreenHover from "./components/ScreenHover/ScreenHover";
 import { Switch, Route, withRouter } from "react-router-dom";
 
-import providers from "./providersList";
+import { providersList } from "./utils/providers-list";
 
 const AppDiv = styled.div`
   text-align: center;
@@ -29,7 +29,7 @@ class App extends React.PureComponent {
 
 
   setProvider = (providerId) => {
-    const selectedProvider = providers.find(provider => provider.id === providerId);
+    const selectedProvider = providersList.find(provider => provider.id === providerId);
     this.setState({ selectedProvider, errorMessage: "" });
   }
 
