@@ -11,6 +11,8 @@ import { withRouter } from "react-router-dom"
 
 import { Input } from "../Input/Input"
 
+import { buttonStates } from "../../utils/button-states"
+
 const Button = styled.button`
   outline: none;
   opacity: 0.9;
@@ -87,7 +89,7 @@ const Form = React.memo(
     }, [])
 
     function setForm(field, data) {
-      let amount = data.replace(/\D/g, "")
+      const amount = data.replace(/\D/g, "")
       setFormData({
         ...formData,
         [field]: amount,
@@ -126,7 +128,10 @@ const Form = React.memo(
         phone: phoneError,
         amount: amountError,
       })
-      setButtonState(btnState)
+
+      if (buttonState !== buttonStates[btnState]) {
+        setButtonState(btnState)
+      }
 
       return phoneError || amountError
         ? {
