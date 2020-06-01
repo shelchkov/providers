@@ -88,13 +88,16 @@ const Form = React.memo(
       }
     }, [])
 
-    function setForm(field, data) {
+    const setForm = (field, data) => {
       const amount = data.replace(/\D/g, "")
-      setFormData({
-        ...formData,
-        [field]: amount,
-      })
-      console.log(formData)
+
+      if (formData[field] !== amount) {
+        setFormData({
+          ...formData,
+          [field]: amount,
+        })
+        console.log(formData)
+      }
     }
 
     function checkForm() {
