@@ -35,12 +35,21 @@ const ProviderDiv = styled.div`
 	}
 `;
 
+const getSrcset = (provider, breakpoint) => {
+	if (breakpoint === 1 || !provider.mobileLogo) {
+		return provider.logo
+	}
+
+	return `${provider.mobileLogo} 550w, ${provider.logo} 1100w`
+}
+
 const Provider = React.memo(({ provider, selectProvider }) => (
 	<ProviderDiv className="ma3 br3 pa3 ml-auto mr-auto pointer bg-white overflow-hidden flex flex-column justify-center overflow-hidden" 
 		title={provider.name} onClick={() => selectProvider(provider.id)}>
-		<div>
-			<Logo src={provider.logo} alt={provider.name} />
-		</div>
+		<picture>
+			<source srcSet={getSrcset(provider, 1)} media="(min-width: 550px)" />
+			<Logo srcSet={getSrcset(provider, 0)} alt={provider.name} />
+		</picture>
 		<p>{provider.name}</p>
 	</ProviderDiv>
 ))
