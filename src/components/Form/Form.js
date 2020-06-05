@@ -195,6 +195,7 @@ const Form = React.memo(
               mask="+7 (999) 999-99-99"
               onFocus={handlePhoneFocus}
               onKeyDown={handleEnterPress}
+              inputMode="tel"
             />
           </div>
           <div className="mb1" style={{ marginTop: "1.65rem" }}>
@@ -205,6 +206,7 @@ const Form = React.memo(
               mask="Rub 999"
               onFocus={handleAmountFocus}
               onKeyDown={handleEnterPress}
+              inputMode="decimal"
             />
           </div>
         </form>
