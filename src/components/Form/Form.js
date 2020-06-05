@@ -164,7 +164,7 @@ const Form = React.memo(
 
     return (
       <>
-        {screenHeight > 321 ? (
+        {screenHeight > 321 && (
           <div className="mt2 mb3 ml3 mr3">
             <img
               src={provider.logo}
@@ -173,7 +173,7 @@ const Form = React.memo(
               className="logo"
             />
           </div>
-        ) : null}
+        )}
 
         <div className="mb1">
           <div className="flex items-start">
