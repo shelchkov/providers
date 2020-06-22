@@ -39,6 +39,10 @@ const GetBackBtn = styled(ActiveBtn)`
 `
 
 const extractSearchValue = (search, name) => {
+  if (!search) {
+    return
+  }
+
   const value = search
     .replace("?", "")
     .split("&")
@@ -59,15 +63,6 @@ const Form = React.memo(
     history,
     setProvider,
   }) => {
-    if (!provider.id) {
-      const search = history.location.search
-      const selectedProviderId =
-        search && extractSearchValue(search, "provider")
-      if (selectedProviderId) {
-        setProvider(parseInt(selectedProviderId))
-      }
-    }
-
     const [formData, setFormData] = useState({ phone: "", amount: "" })
 
     const [formErrors, setFormErrors] = useState({
@@ -83,9 +78,20 @@ const Form = React.memo(
       }
 
       window.onresize = resizeHandler
+
+      if (!provider.id) {
+        const search = history.location.search
+        const selectedProviderId = extractSearchValue(search, "provider")
+
+        if (selectedProviderId) {
+          setProvider(parseInt(selectedProviderId))
+        }
+      }
+
       return () => {
         window.removeEventListener("onresize", resizeHandler)
       }
+      // eslint-disable-next-line
     }, [])
 
     const setForm = (field, data) => {
@@ -96,7 +102,6 @@ const Form = React.memo(
           ...formData,
           [field]: amount,
         })
-        console.log(formData)
       }
     }
 
