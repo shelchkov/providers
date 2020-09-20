@@ -1,16 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
+import React from "react"
+import styled from "styled-components"
 
 const StyledError = styled.p`
-	color: #777;
-`;
+  margin-top: 0;
+  color: #777;
+  font-size: 0.875rem;
+`
 
-const ErrorP = React.memo(({errorMessage}) => {
-	return (
-		<StyledError className="mt0 f6" title="There was an error. Try Again">
-			{errorMessage}
-		</StyledError>
-	)
-});
-
-export default ErrorP;
+// eslint-disable-next-line react/display-name
+export const ErrorP = React.memo(({ errorMessage }) => (
+  <StyledError title="There was an error. Try Again">
+    {errorMessage}
+  </StyledError>
+))
