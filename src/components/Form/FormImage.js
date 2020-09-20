@@ -11,6 +11,7 @@ const Image = styled.img`
   }
 `
 
+// eslint-disable-next-line react/display-name
 export const FormImage = React.memo(({ logo, name }) => (
   <ImageContainer>
     <Image src={logo} alt={name} title={name} />

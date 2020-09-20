@@ -35,3 +35,6 @@ export const validateAmount = (amount) => {
 
   return
 }
+
+export const isEqual = (obj1, obj2) =>
+  JSON.stringify(obj1) === JSON.stringify(obj2)

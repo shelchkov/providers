@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { createStructuredSelector } from "reselect"
@@ -16,8 +16,10 @@ import {
   extractSearchValue,
   validatePhone,
   validateAmount,
+  isEqual,
 } from "../../utils/utils"
 import { useScreenSize } from "../../effects/use-screen-size"
+import { useRefData } from "../../effects/use-ref-data"
 
 const GetBackContainer = styled.div`
   display: flex;
@@ -35,6 +37,7 @@ const InputContainer = styled.div`
   margin-bottom: ${(p) => p.marginBottom || "0"};
 `
 
+// eslint-disable-next-line react/display-name
 const Form = React.memo(
   ({
     getHome,
@@ -46,7 +49,8 @@ const Form = React.memo(
     history,
     setProvider,
   }) => {
-    const [formData, setFormData] = useState({ phone: "", amount: "" })
+    console.log("Form")
+    const { updateData, getData } = useRefData({ phone: "", amount: "" })
 
     const [formErrors, setFormErrors] = useState({
       phone: "",
@@ -69,13 +73,10 @@ const Form = React.memo(
     }, [])
 
     const setForm = (field, data) => {
-      const amount = data.replace(/\D/g, "")
+      const value = data.replace(/\D/g, "")
 
-      if (formData[field] !== amount) {
-        setFormData({
-          ...formData,
-          [field]: amount,
-        })
+      if (getData(field) !== value) {
+        updateData({ [field]: value })
       }
     }
 
@@ -84,14 +85,18 @@ const Form = React.memo(
         return
       }
 
-      const phoneError = validatePhone(formData.phone)
-      const amountError = validateAmount(formData.amount)
+      const phoneError = validatePhone(getData("phone"))
+      const amountError = validateAmount(getData("amount"))
       const btnState = !phoneError && !amountError ? "submit" : "check"
 
-      setFormErrors({
+      const newErrors = {
         phone: phoneError,
         amount: amountError,
-      })
+      }
+
+      if (!isEqual(newErrors, formErrors)) {
+        setFormErrors(newErrors)
+      }
 
       if (buttonState.type !== btnState) {
         setButtonState(btnState)
@@ -107,23 +112,35 @@ const Form = React.memo(
 
     const handleEnterPress = (event) => {
       if (event.keyCode === 13 && !checkForm()) {
-        submitForm(formData)
+        handleFormSubmit()
       }
     }
 
     const handleFormSubmit = () => {
-      submitForm(formData)
+      submitForm(getData())
     }
 
-    const handlePhoneFocus = () => {
-      setFormErrors({ ...formErrors, phone: "" })
-    }
+    const resetError = useCallback(
+      (field) => {
+        const newErrors = { ...formErrors, [field]: "" }
 
-    const handleAmountFocus = () => {
-      setFormErrors({ ...formErrors, amount: "" })
-    }
+        if (!isEqual(newErrors, formErrors)) {
+          setFormErrors(newErrors)
+        }
+      },
+      [formErrors, setFormErrors]
+    )
+
+    const handlePhoneFocus = useCallback(() => {
+      resetError("phone")
+    }, [resetError])
+
+    const handleAmountFocus = useCallback(() => {
+      resetError("amount")
+    }, [resetError])
 
     const setPhoneValue = (data) => setForm("phone", data)
+    const setAmountValue = (data) => setForm("amount", data)
 
     return (
       <>
@@ -150,7 +167,7 @@ const Form = React.memo(
           <InputContainer marginBottom=".25rem" marginTop="1.65rem">
             <Input
               label="Amount"
-              setInput={(data) => setForm("amount", data)}
+              setInput={setAmountValue}
               error={formErrors.amount}
               mask="Rub 999"
               onFocus={handleAmountFocus}
