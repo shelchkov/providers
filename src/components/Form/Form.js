@@ -49,7 +49,6 @@ const Form = React.memo(
     history,
     setProvider,
   }) => {
-    console.log("Form")
     const { updateData, getData } = useRefData({ phone: "", amount: "" })
 
     const [formErrors, setFormErrors] = useState({
