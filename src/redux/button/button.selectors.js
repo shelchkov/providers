@@ -1,8 +1,8 @@
-import { createSelector } from 'reselect';
+import { createSelector } from "reselect"
 
-const selectButton = state => state.button;
+const selectButton = (state) => state.button
 
 export const selectBtnState = createSelector(
-	[selectButton],
-	button => button.btnState
+  [selectButton],
+  (button) => button.btnState
 )
