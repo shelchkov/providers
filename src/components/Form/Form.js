@@ -1,56 +1,39 @@
 import React, { useState, useEffect } from "react"
-import "./Form.css"
-import FormContainer from "../FormContainer/FormContainer"
-import { connect } from "react-redux"
-import { selectBtnState } from "../../redux/button/button.selectors"
-import { createStructuredSelector } from "reselect"
-import { setButtonType } from "../../redux/button/button.actions"
-import ErrorP from "./ErrorP"
 import styled from "styled-components"
+import { connect } from "react-redux"
+import { createStructuredSelector } from "reselect"
 import { withRouter } from "react-router-dom"
 
+import FormContainer from "../FormContainer/FormContainer"
+import { ErrorP } from "./ErrorP"
 import { Input } from "../Input/Input"
+import { FormImage } from "./FormImage"
+import { ActiveBtn, NotAllowedBtn, GetBackBtn } from "../Button/Button"
 
-import { buttonStates } from "../../utils/button-states"
+import { selectBtnState } from "../../redux/button/button.selectors"
+import { setButtonType } from "../../redux/button/button.actions"
+import {
+  extractSearchValue,
+  validatePhone,
+  validateAmount,
+} from "../../utils/utils"
+import { useScreenSize } from "../../effects/use-screen-size"
 
-const Button = styled.button`
-  outline: none;
-  opacity: 0.9;
+const GetBackContainer = styled.div`
+  display: flex;
+  margin-bottom: 0.25rem;
 `
 
-const ActiveBtn = styled(Button)`
-  &:hover,
-  &:focus {
-    transform: scale(0.96);
-    opacity: 1;
-    transition: transform 0.12s ease-out, opacity 0.12s ease-out;
-    box-shadow: 0px 0px 38px -5px rgba(204, 204, 204, 0.46);
-  }
+const StyledForm = styled.form`
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 1rem;
 `
 
-const NotAllowedBtn = styled(Button)`
-  cursor: not-allowed;
-  color: #777;
+const InputContainer = styled.div`
+  margin-top: ${(p) => p.marginTop || "1.1rem"};
+  margin-bottom: ${(p) => p.marginBottom || "0"};
 `
-
-const GetBackBtn = styled(ActiveBtn)`
-  color: #333;
-  border-color: #ccc;
-`
-
-const extractSearchValue = (search, name) => {
-  if (!search) {
-    return
-  }
-
-  const value = search
-    .replace("?", "")
-    .split("&")
-    .map((pair) => pair.split("="))
-    .find((key) => key[0] === name)
-
-  return value && value[1]
-}
 
 const Form = React.memo(
   ({
@@ -70,16 +53,10 @@ const Form = React.memo(
       amount: "",
     })
 
-    const [screenHeight, setScreenHeight] = useState(window.innerHeight)
+    const { screenHeight } = useScreenSize()
 
     useEffect(() => {
-      const resizeHandler = (event) => {
-        setScreenHeight(event.target.innerHeight)
-      }
-
-      window.onresize = resizeHandler
-
-      if (!provider.id) {
+      if (!provider || !provider.id) {
         const search = history.location.search
         const selectedProviderId = extractSearchValue(search, "provider")
 
@@ -88,9 +65,6 @@ const Form = React.memo(
         }
       }
 
-      return () => {
-        window.removeEventListener("onresize", resizeHandler)
-      }
       // eslint-disable-next-line
     }, [])
 
@@ -106,38 +80,20 @@ const Form = React.memo(
     }
 
     function checkForm() {
-      if (buttonState.text === "Please Wait") {
+      if (buttonState.type === "wait") {
         return
       }
 
-      let phoneError = ""
-      let amountError = ""
-      let btnState = "check"
-
-      // Phone Validation
-      if (formData.phone.length === 0) {
-        phoneError = "You need to type in your phone number"
-      } else if (formData.phone[1] !== "9") {
-        phoneError = "Please provide correct number"
-      } else if (formData.phone.length !== 11) {
-        phoneError = "Phone number should contain exactly 11 digits"
-      } else {
-        btnState = "submit"
-      }
-
-      // Amount Validation
-      if (formData.amount < 1) {
-        amountError =
-          "You can choose amount that lies between 1 and 1000 rubles"
-        btnState = "check"
-      }
+      const phoneError = validatePhone(formData.phone)
+      const amountError = validateAmount(formData.amount)
+      const btnState = !phoneError && !amountError ? "submit" : "check"
 
       setFormErrors({
         phone: phoneError,
         amount: amountError,
       })
 
-      if (buttonState !== buttonStates[btnState]) {
+      if (buttonState.type !== btnState) {
         setButtonState(btnState)
       }
 
@@ -167,43 +123,31 @@ const Form = React.memo(
       setFormErrors({ ...formErrors, amount: "" })
     }
 
+    const setPhoneValue = (data) => setForm("phone", data)
+
     return (
       <>
         {screenHeight > 321 && (
-          <div className="mt2 mb3 ml3 mr3">
-            <img
-              src={provider.logo}
-              alt={provider.name}
-              title={provider.name}
-              className="logo"
-            />
-          </div>
+          <FormImage logo={provider.logo} name={provider.name} />
         )}
 
-        <div className="mb1">
-          <div className="flex items-start">
-            <GetBackBtn
-              onClick={getHome}
-              className="br3 ba ph3 pv2 mb2 pointer bg-transparent"
-            >
-              Get Back
-            </GetBackBtn>
-          </div>
-        </div>
+        <GetBackContainer>
+          <GetBackBtn onClick={getHome}>Get Back</GetBackBtn>
+        </GetBackContainer>
 
-        <form className="flex flex-column mb3">
-          <div style={{ marginTop: "1.1rem" }}>
+        <StyledForm>
+          <InputContainer>
             <Input
               label="Phone Number"
-              setInput={(data) => setForm("phone", data)}
+              setInput={setPhoneValue}
               error={formErrors.phone}
               mask="+7 (999) 999-99-99"
               onFocus={handlePhoneFocus}
               onKeyDown={handleEnterPress}
               inputMode="tel"
             />
-          </div>
-          <div className="mb1" style={{ marginTop: "1.65rem" }}>
+          </InputContainer>
+          <InputContainer marginBottom=".25rem" marginTop="1.65rem">
             <Input
               label="Amount"
               setInput={(data) => setForm("amount", data)}
@@ -213,14 +157,14 @@ const Form = React.memo(
               onKeyDown={handleEnterPress}
               inputMode="decimal"
             />
-          </div>
-        </form>
-        {buttonState.text === "Check Info!" ? (
+          </InputContainer>
+        </StyledForm>
+
+        {buttonState.type === "check" ? (
           <NotAllowedBtn
             onMouseOver={checkForm}
             onFocus={checkForm}
             title="Please Provide Correct Information"
-            className="br3 ba ph3 pv2 mb2 center"
             onKeyDown={handleEnterPress}
           >
             {buttonState.text}
@@ -230,16 +174,14 @@ const Form = React.memo(
             onClick={handleFormSubmit}
             onMouseOver={checkForm}
             onFocus={checkForm}
-            className="br3 ba ph3 pv2 mb2 pointer center"
-            style={{
-              background: buttonState.bgColor,
-              color: buttonState.color,
-            }}
+            backgroundColor={buttonState.bgColor}
+            color={buttonState.color}
           >
             {buttonState.text}
           </ActiveBtn>
         )}
-        {errorMessage.length > 0 && buttonState.text === "Error" ? (
+
+        {errorMessage.length > 0 && buttonState.type === "error" ? (
           <ErrorP errorMessage={errorMessage} />
         ) : null}
       </>
@@ -247,12 +189,10 @@ const Form = React.memo(
   }
 )
 
-// Receive state elements for that element
 const mapStateToProps = createStructuredSelector({
   buttonState: selectBtnState,
 })
 
-// Set State
 const mapDispatchToProps = (dispatch) => ({
   setButtonState: (button) => dispatch(setButtonType(button)),
 })
