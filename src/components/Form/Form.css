@@ -1,9 +1,0 @@
-.mw-240 {
-	max-width: 240px;
-}
-
-@media screen and (max-height: 400px) {
-	.logo {
-		width: 140px;
-	}
-}
