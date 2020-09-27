@@ -29,13 +29,15 @@ const GetBackContainer = styled.div`
 const StyledForm = styled.form`
   display: flex;
   flex-direction: column;
-  margin-bottom: 1rem;
 `
 
 const InputContainer = styled.div`
   margin-top: ${(p) => p.marginTop || "1.1rem"};
   margin-bottom: ${(p) => p.marginBottom || "0"};
 `
+
+const buttonNodeName = "BUTTON"
+const formNodeName = "FORM"
 
 // eslint-disable-next-line react/display-name
 const Form = React.memo(
@@ -68,7 +70,7 @@ const Form = React.memo(
         }
       }
 
-      // eslint-disable-next-line
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     const setForm = (field, data) => {
@@ -109,11 +111,39 @@ const Form = React.memo(
         : null
     }
 
+    const checkFormAndSubmit = (event) => {
+      event.preventDefault()
+      !checkForm() && handleFormSubmit()
+    }
+
     const handleEnterPress = (event) => {
-      if (event.keyCode === 13 && !checkForm()) {
+      if (event.keyCode !== 13) {
+        return
+      }
+
+      for (let el of event.path) {
+        if (el.nodeName === buttonNodeName && el.onclick) {
+          return
+        }
+
+        if (el.nodeName === formNodeName) {
+          break
+        }
+      }
+
+      if (!checkForm()) {
         handleFormSubmit()
       }
     }
+
+    useEffect(() => {
+      document.addEventListener("keydown", handleEnterPress)
+
+      return () => {
+        document.removeEventListener("keydown", handleEnterPress)
+      }
+      // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [])
 
     const handleFormSubmit = () => {
       submitForm(getData())
@@ -151,7 +181,7 @@ const Form = React.memo(
           <GetBackBtn onClick={getHome}>Get Back</GetBackBtn>
         </GetBackContainer>
 
-        <StyledForm>
+        <StyledForm onSubmit={checkFormAndSubmit}>
           <InputContainer>
             <Input
               label="Phone Number"
@@ -159,43 +189,40 @@ const Form = React.memo(
               error={formErrors.phone}
               mask="+7 (999) 999-99-99"
               onFocus={handlePhoneFocus}
-              onKeyDown={handleEnterPress}
               inputMode="tel"
             />
           </InputContainer>
-          <InputContainer marginBottom=".25rem" marginTop="1.65rem">
+          <InputContainer marginBottom="1.25rem" marginTop="1.65rem">
             <Input
               label="Amount"
               setInput={setAmountValue}
               error={formErrors.amount}
               mask="Rub 999"
               onFocus={handleAmountFocus}
-              onKeyDown={handleEnterPress}
               inputMode="decimal"
             />
           </InputContainer>
-        </StyledForm>
 
-        {buttonState.type === "check" ? (
-          <NotAllowedBtn
-            onMouseOver={checkForm}
-            onFocus={checkForm}
-            title="Please Provide Correct Information"
-            onKeyDown={handleEnterPress}
-          >
-            {buttonState.text}
-          </NotAllowedBtn>
-        ) : (
-          <ActiveBtn
-            onClick={handleFormSubmit}
-            onMouseOver={checkForm}
-            onFocus={checkForm}
-            backgroundColor={buttonState.bgColor}
-            color={buttonState.color}
-          >
-            {buttonState.text}
-          </ActiveBtn>
-        )}
+          {buttonState.type === "check" ? (
+            <NotAllowedBtn
+              onMouseOver={checkForm}
+              onFocus={checkForm}
+              title="Please Provide Correct Information"
+            >
+              {buttonState.text}
+            </NotAllowedBtn>
+          ) : (
+            <ActiveBtn
+              onMouseOver={checkForm}
+              onFocus={checkForm}
+              backgroundColor={buttonState.bgColor}
+              color={buttonState.color}
+              type="submit"
+            >
+              {buttonState.text}
+            </ActiveBtn>
+          )}
+        </StyledForm>
 
         {errorMessage.length > 0 && buttonState.type === "error" ? (
           <ErrorP errorMessage={errorMessage} />
