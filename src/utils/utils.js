@@ -38,3 +38,13 @@ export const validateAmount = (amount) => {
 
 export const isEqual = (obj1, obj2) =>
   JSON.stringify(obj1) === JSON.stringify(obj2)
+
+export const isAllValuesEmpty = (obj) => {
+  for (let value of Object.values(obj)) {
+    if (value) {
+      return false
+    }
+  }
+
+  return true
+}
