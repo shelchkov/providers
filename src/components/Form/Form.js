@@ -121,7 +121,7 @@ const Form = React.memo(
         return
       }
 
-      for (let el of event.path) {
+      for (const el of event.path) {
         if (el.nodeName === buttonNodeName && el.onclick) {
           return
         }
