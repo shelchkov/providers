@@ -13,7 +13,7 @@ export const extractSearchValue = (search, name) => {
 }
 
 export const validatePhone = (phone) => {
-  if (phone.length === 0) {
+  if (!phone || phone.length === 0) {
     return "You need to type in your phone number"
   }
 
@@ -29,7 +29,7 @@ export const validatePhone = (phone) => {
 }
 
 export const validateAmount = (amount) => {
-  if (amount < 1) {
+  if (!amount || amount < 1) {
     return "You can choose amount that lies between 1 and 1000 rubles"
   }
 
