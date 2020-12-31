@@ -19,10 +19,22 @@ const Logo = styled.img`
 `
 
 const ProviderDiv = styled.div`
-  border: 1px solid #aac3be;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
   width: 240px;
   height: 144px;
+  margin: 1rem auto;
+  padding: 1rem;
+
+  background-color: white;
+  border: 1px solid #aac3be;
+  border-radius: 0.5rem;
   box-shadow: 0px 0px 38px -5px rgba(204, 204, 204, 0.46);
+
+  cursor: pointer;
+  overflow: hidden;
 
   @media screen and (min-width: 550px) and (max-width: 750px) {
     width: 320px;
@@ -45,7 +57,6 @@ export const getSrcset = (provider, breakpoint) => {
 
 const ProviderMemo = ({ provider, selectProvider }) => (
   <ProviderDiv
-    className="ma3 br3 pa3 ml-auto mr-auto pointer bg-white overflow-hidden flex flex-column justify-center overflow-hidden"
     title={provider.name}
     onClick={() => selectProvider(provider.id)}
   >
