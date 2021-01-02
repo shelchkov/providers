@@ -11,6 +11,7 @@ import ScreenHover from "./components/ScreenHover/ScreenHover"
 import { Switch, Route, withRouter } from "react-router-dom"
 
 import { providersList } from "./utils/providers-list"
+import { sendRequest } from "./utils/utils"
 
 const AppDiv = styled.div`
   text-align: center;
@@ -31,7 +32,14 @@ class App extends React.PureComponent {
     const selectedProvider = providersList.find(
       (provider) => provider.id === providerId
     )
-    this.setState({ selectedProvider, errorMessage: "" })
+
+    const changes = { errorMessage: "" }
+
+    if (selectedProvider) {
+      changes.selectedProvider = selectedProvider
+    }
+
+    this.setState(changes)
   }
 
   selectProvider = (providerId) => {
@@ -41,18 +49,17 @@ class App extends React.PureComponent {
   }
 
   submitForm = (formData) => {
-    if (
-      this.props.buttonState.text === "Please Wait" ||
-      this.props.buttonState.text === "Success"
-    ) {
+    if (["wait", "success"].includes(this.props.buttonState.type)) {
       return
     }
+
     this.props.setButtonState("wait")
+
     this.requestInfo(formData)
       .then((res) => {
         console.log(res)
-        this.getHome()
         this.props.setButtonState("success")
+        this.getHome()
       })
       .catch((error) => {
         console.log("Error: " + error.message)
@@ -90,28 +97,12 @@ class App extends React.PureComponent {
     if (formData.phone.length !== 11 || !formData.amount) {
       throw new Error("Wrong Data provided!")
     }
-    // Request Time: 900 - 2000ms
-    const reqTime = Math.random() * 1100 + 900
-    const result = await new Promise((resolve, reject) => {
-      setTimeout(() => {
-        if (Math.random() < 0.5) {
-          resolve({
-            result: "success",
-            data: {
-              some: "Information",
-              other: "Information",
-              provider: { name: this.state.selectedProvider.name },
-            },
-            user: {
-              phone: formData.phone,
-              amount: formData.amount,
-            },
-          })
-        } else {
-          reject({ message: "Something went wrong" })
-        }
-      }, reqTime)
-    })
+
+    const result = await sendRequest(
+      this.state.selectedProvider,
+      formData
+    )
+
     return result
   }
 
@@ -130,6 +121,7 @@ class App extends React.PureComponent {
               <ProvidersList selectProvider={this.selectProvider} />
             )}
           />
+          
           <Route
             exact
             path="/form"
@@ -144,6 +136,7 @@ class App extends React.PureComponent {
             )}
           />
         </Switch>
+
         {(this.state.coverShow || this.state.coverUp) && (
           <ScreenHover
             coverUp={this.state.coverUp}

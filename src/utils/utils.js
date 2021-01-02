@@ -40,7 +40,7 @@ export const isEqual = (obj1, obj2) =>
   JSON.stringify(obj1) === JSON.stringify(obj2)
 
 export const isAllValuesEmpty = (obj) => {
-  for (let value of Object.values(obj)) {
+  for (const value of Object.values(obj)) {
     if (value) {
       return false
     }
@@ -48,3 +48,28 @@ export const isAllValuesEmpty = (obj) => {
 
   return true
 }
+
+const getRandomNumber = (start, end) =>
+  Math.random() * ( end - start ) + start
+
+export const sendRequest = (provider, formData) =>
+  new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (Math.random() < 0.5) {
+        resolve({
+          result: "success",
+          data: {
+            some: "Information",
+            other: "Information",
+            provider: { name: provider.name },
+          },
+          user: {
+            phone: formData.phone,
+            amount: formData.amount,
+          },
+        })
+      } else {
+        reject({ message: "Something went wrong" })
+      }
+    }, getRandomNumber(900, 2000))
+  })
