@@ -73,3 +73,7 @@ export const sendRequest = (provider, formData) =>
       }
     }, getRandomNumber(900, 2000))
   })
+
+export const urlParams = {
+  provider: "provider",
+}

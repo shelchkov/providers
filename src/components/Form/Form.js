@@ -17,6 +17,7 @@ import {
   validatePhone,
   validateAmount,
   isEqual,
+  urlParams,
 } from "../../utils/utils"
 import { useScreenSize } from "../../effects/use-screen-size"
 import { useRefData } from "../../effects/use-ref-data"
@@ -38,6 +39,9 @@ const InputContainer = styled.div`
 
 const buttonNodeName = "BUTTON"
 const formNodeName = "FORM"
+
+const getProviderId = (search) =>
+  extractSearchValue(search, urlParams.provider)
 
 // eslint-disable-next-line react/display-name
 const Form = React.memo(
@@ -62,8 +66,8 @@ const Form = React.memo(
 
     useEffect(() => {
       if (!provider || !provider.id) {
-        const search = history.location.search
-        const selectedProviderId = extractSearchValue(search, "provider")
+        const { search } = history.location
+        const selectedProviderId = getProviderId(search)
 
         if (selectedProviderId) {
           setProvider(parseInt(selectedProviderId))
