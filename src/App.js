@@ -29,7 +29,7 @@ class App extends React.PureComponent {
   }
 
   setProvider = (providerId) => {
-    const selectedProvider = providersList.find(
+    const selectedProvider = providerId && providersList.find(
       (provider) => provider.id === providerId
     )
 

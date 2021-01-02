@@ -68,10 +68,8 @@ const Form = React.memo(
       if (!provider || !provider.id) {
         const { search } = history.location
         const selectedProviderId = getProviderId(search)
-
-        if (selectedProviderId) {
-          setProvider(parseInt(selectedProviderId))
-        }
+        
+        setProvider(parseInt(selectedProviderId))
       }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
