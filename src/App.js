@@ -11,7 +11,7 @@ import ScreenHover from "./components/ScreenHover/ScreenHover"
 import { Switch, Route, withRouter } from "react-router-dom"
 
 import { providersList } from "./utils/providers-list"
-import { sendRequest } from "./utils/utils"
+import { sendRequest, urlParams } from "./utils/utils"
 
 const AppDiv = styled.div`
   text-align: center;
@@ -29,7 +29,7 @@ class App extends React.PureComponent {
   }
 
   setProvider = (providerId) => {
-    const selectedProvider = providersList.find(
+    const selectedProvider = providerId && providersList.find(
       (provider) => provider.id === providerId
     )
 
@@ -37,6 +37,8 @@ class App extends React.PureComponent {
 
     if (selectedProvider) {
       changes.selectedProvider = selectedProvider
+    } else {
+      this.props.history.push("/")
     }
 
     this.setState(changes)
@@ -83,7 +85,7 @@ class App extends React.PureComponent {
       this.props.history.push(
         route === "home"
           ? ""
-          : `${route}?provider=${this.state.selectedProvider.id}`
+          : `${route}?${urlParams.provider}=${this.state.selectedProvider.id}`
       )
     }, 1100)
 
