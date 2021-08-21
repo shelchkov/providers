@@ -28,19 +28,21 @@ class App extends React.PureComponent {
     }
   }
 
+  // eslint-disable-next-line
   setProvider = (providerId) => {
-    const selectedProvider = providerId && providersList.find(
-      (provider) => provider.id === providerId
-    )
+    let selectedProvider
+
+    if (Number.isFinite(providerId)) {
+      selectedProvider = providersList.find(({ id }) => id === providerId)
+    }
 
     const changes = { errorMessage: "" }
 
-    if (selectedProvider) {
-      changes.selectedProvider = selectedProvider
-    } else {
+    if (!selectedProvider) {
       this.props.history.push("/")
     }
 
+    changes.selectedProvider = selectedProvider
     this.setState(changes)
   }
 
