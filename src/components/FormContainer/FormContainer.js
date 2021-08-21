@@ -1,4 +1,3 @@
-// HOC
 import React from "react"
 import styled from "styled-components"
 
@@ -28,18 +27,10 @@ const WrapDiv = styled.div`
   }
 `
 
-function FormContainer(WrappedComponent) {
-  return class extends React.Component {
-    render() {
-      return (
-        <WrapDiv>
-          <Container>
-            <WrappedComponent {...this.props} />
-          </Container>
-        </WrapDiv>
-      )
-    }
-  }
-}
-
-export default FormContainer
+export const FormContainer = ({ children }) => (
+  <WrapDiv>
+    <Container>
+      {children}
+    </Container>
+  </WrapDiv>
+)

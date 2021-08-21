@@ -5,13 +5,13 @@ import Form from "./components/Form/Form"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { createStructuredSelector } from "reselect"
-import { selectBtnState } from "./redux/button/button.selectors"
-import { setButtonType } from "./redux/button/button.actions"
 import ScreenHover from "./components/ScreenHover/ScreenHover"
 import { Switch, Route, withRouter } from "react-router-dom"
 
 import { providersList } from "./utils/providers-list"
 import { sendRequest, urlParams } from "./utils/utils"
+import { startSubmit, submitSuccess, resetForm, submitFail } from "./redux/form/form.actions"
+import { selectCanSubmit } from "./redux/form/form.selectors"
 
 const AppDiv = styled.div`
   text-align: center;
@@ -24,11 +24,9 @@ class App extends React.PureComponent {
       selectedProvider: {},
       coverUp: false,
       coverShow: false,
-      errorMessage: "",
     }
   }
 
-  // eslint-disable-next-line
   setProvider = (providerId) => {
     let selectedProvider
 
@@ -36,41 +34,35 @@ class App extends React.PureComponent {
       selectedProvider = providersList.find(({ id }) => id === providerId)
     }
 
-    const changes = { errorMessage: "" }
-
     if (!selectedProvider) {
       this.props.history.push("/")
     }
 
-    changes.selectedProvider = selectedProvider
-    this.setState(changes)
+    this.setState({ selectedProvider })
   }
 
   selectProvider = (providerId) => {
     this.setProvider(providerId)
-    this.props.setButtonState("submit")
+    this.props.resetForm()
     this.cover("form")
   }
 
   submitForm = (formData) => {
-    if (["wait", "success"].includes(this.props.buttonState.type)) {
+    if (!this.props.canSubmit) {
       return
     }
-
-    this.props.setButtonState("wait")
+    
+    this.props.startSubmit()
 
     this.requestInfo(formData)
       .then((res) => {
         console.log(res)
-        this.props.setButtonState("success")
+        this.props.submitSuccess()
         this.getHome()
       })
       .catch((error) => {
         console.log("Error: " + error.message)
-        this.setState({
-          errorMessage: error.message,
-        })
-        this.props.setButtonState("error")
+        this.props.submitFail(error.message)
       })
   }
 
@@ -134,7 +126,6 @@ class App extends React.PureComponent {
                 getHome={this.getHome}
                 submitForm={this.submitForm}
                 provider={this.state.selectedProvider}
-                errorMessage={this.state.errorMessage}
                 setProvider={this.setProvider}
               />
             )}
@@ -153,11 +144,14 @@ class App extends React.PureComponent {
 }
 
 const mapStateToProps = createStructuredSelector({
-  buttonState: selectBtnState,
+  canSubmit: selectCanSubmit,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  setButtonState: (button) => dispatch(setButtonType(button)),
+  resetForm: () => dispatch(resetForm()),
+  startSubmit: () => dispatch(startSubmit()),
+  submitSuccess: () => dispatch(submitSuccess()),
+  submitFail: (error) => dispatch(submitFail(error)),
 })
 
 export default withRouter(
