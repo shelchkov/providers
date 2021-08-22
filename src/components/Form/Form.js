@@ -4,14 +4,12 @@ import { connect } from "react-redux"
 import { createStructuredSelector } from "reselect"
 import { withRouter } from "react-router-dom"
 
-import FormContainer from "../FormContainer/FormContainer"
+import { FormContainer } from "../FormContainer/FormContainer"
 import { ErrorP } from "./ErrorP"
 import { Input } from "../Input/Input"
 import { FormImage } from "./FormImage"
-import { ActiveBtn, NotAllowedBtn, GetBackBtn } from "../Button/Button"
+import { GetBackBtn } from "../Button/Button"
 
-import { selectBtnState } from "../../redux/button/button.selectors"
-import { setButtonType } from "../../redux/button/button.actions"
 import {
   extractSearchValue,
   validatePhone,
@@ -21,6 +19,10 @@ import {
 } from "../../utils/utils"
 import { useScreenSize } from "../../effects/use-screen-size"
 import { useRefData } from "../../effects/use-ref-data"
+import { validationFail, validationSuccess } from "../../redux/form/form.actions"
+import { selectCanSubmit, selectError } from "../../redux/form/form.selectors"
+import { FormButton } from "./form-button"
+import { compose } from "redux"
 
 const GetBackContainer = styled.div`
   display: flex;
@@ -49,11 +51,12 @@ const Form = React.memo(
     getHome,
     submitForm,
     provider,
-    errorMessage,
-    buttonState,
-    setButtonState,
     history,
     setProvider,
+    validationSuccess,
+    validationFail,
+    canSubmit,
+    error,
   }) => {
     const { updateData, getData } = useRefData({ phone: "", amount: "" })
 
@@ -84,13 +87,12 @@ const Form = React.memo(
     }
 
     function checkForm() {
-      if (buttonState.type === "wait") {
+      if (!canSubmit) {
         return
       }
 
       const phoneError = validatePhone(getData("phone"))
       const amountError = validateAmount(getData("amount"))
-      const btnState = !phoneError && !amountError ? "submit" : "check"
 
       const newErrors = {
         phone: phoneError,
@@ -101,8 +103,10 @@ const Form = React.memo(
         setFormErrors(newErrors)
       }
 
-      if (buttonState.type !== btnState) {
-        setButtonState(btnState)
+      if (!phoneError && !amountError) {
+        validationSuccess()
+      } else {
+        validationFail()
       }
 
       return phoneError || amountError
@@ -174,7 +178,7 @@ const Form = React.memo(
     const setAmountValue = (data) => setForm("amount", data)
 
     return (
-      <>
+      <FormContainer>
         {screenHeight > 321 && (
           <FormImage logo={provider.logo} name={provider.name} />
         )}
@@ -205,43 +209,23 @@ const Form = React.memo(
             />
           </InputContainer>
 
-          {buttonState.type === "check" ? (
-            <NotAllowedBtn
-              onMouseOver={checkForm}
-              onFocus={checkForm}
-              title="Please Provide Correct Information"
-            >
-              {buttonState.text}
-            </NotAllowedBtn>
-          ) : (
-            <ActiveBtn
-              onMouseOver={checkForm}
-              onFocus={checkForm}
-              backgroundColor={buttonState.bgColor}
-              color={buttonState.color}
-              type="submit"
-            >
-              {buttonState.text}
-            </ActiveBtn>
-          )}
+          <FormButton checkForm={checkForm} />
         </StyledForm>
 
-        {errorMessage.length > 0 && buttonState.type === "error" ? (
-          <ErrorP errorMessage={errorMessage} />
-        ) : null}
-      </>
+        {error && <ErrorP errorMessage={error} />}
+      </FormContainer>
     )
   }
 )
 
 const mapStateToProps = createStructuredSelector({
-  buttonState: selectBtnState,
+  canSubmit: selectCanSubmit,
+  error: selectError,
 })
 
 const mapDispatchToProps = (dispatch) => ({
-  setButtonState: (button) => dispatch(setButtonType(button)),
+  validationFail: () => dispatch(validationFail()),
+  validationSuccess: () => dispatch(validationSuccess())
 })
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(FormContainer(Form))
-)
+export default compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(Form)
