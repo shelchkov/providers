@@ -5,13 +5,14 @@ import Form from "./components/Form/Form"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { createStructuredSelector } from "reselect"
-import ScreenHover from "./components/ScreenHover/ScreenHover"
 import { Switch, Route, withRouter } from "react-router-dom"
 
 import { providersList } from "./utils/providers-list"
 import { sendRequest, urlParams } from "./utils/utils"
 import { startSubmit, submitSuccess, resetForm, submitFail } from "./redux/form/form.actions"
 import { selectCanSubmit } from "./redux/form/form.selectors"
+import { compose } from "redux"
+import { withScreenCover } from "screen-cover"
 
 const AppDiv = styled.div`
   text-align: center;
@@ -22,8 +23,6 @@ class App extends React.PureComponent {
     super()
     this.state = {
       selectedProvider: {},
-      coverUp: false,
-      coverShow: false,
     }
   }
 
@@ -67,26 +66,13 @@ class App extends React.PureComponent {
   }
 
   cover = (route) => {
-    this.setState({ coverShow: true })
-
-    setTimeout(() => {
-      this.setState({ coverUp: true })
-    }, 0)
-
-    // Move cover up and open the screen
-    setTimeout(() => {
-      this.setState({ coverShow: false })
+    this.props.showCover(() => {
       this.props.history.push(
         route === "home"
           ? ""
           : `${route}?${urlParams.provider}=${this.state.selectedProvider.id}`
       )
-    }, 1100)
-
-    // Stop showing cover
-    setTimeout(() => {
-      this.setState({ coverUp: false })
-    }, 2000)
+    })
   }
 
   async requestInfo(formData) {
@@ -131,13 +117,6 @@ class App extends React.PureComponent {
             )}
           />
         </Switch>
-
-        {(this.state.coverShow || this.state.coverUp) && (
-          <ScreenHover
-            coverUp={this.state.coverUp}
-            coverShow={this.state.coverShow}
-          />
-        )}
       </AppDiv>
     )
   }
@@ -154,6 +133,4 @@ const mapDispatchToProps = (dispatch) => ({
   submitFail: (error) => dispatch(submitFail(error)),
 })
 
-export default withRouter(
-  connect(mapStateToProps, mapDispatchToProps)(App)
-)
+export default compose(withScreenCover, withRouter, connect(mapStateToProps, mapDispatchToProps))(App)
