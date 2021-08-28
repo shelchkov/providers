@@ -49,31 +49,19 @@ export const isAllValuesEmpty = (obj) => {
   return true
 }
 
-const getRandomNumber = (start, end) =>
+export const getRandomNumber = (start, end) =>
   Math.random() * ( end - start ) + start
-
-export const sendRequest = (provider, formData) =>
-  new Promise((resolve, reject) => {
-    setTimeout(() => {
-      if (Math.random() < 0.5) {
-        resolve({
-          result: "success",
-          data: {
-            some: "Information",
-            other: "Information",
-            provider: { name: provider.name },
-          },
-          user: {
-            phone: formData.phone,
-            amount: formData.amount,
-          },
-        })
-      } else {
-        reject({ message: "Something went wrong" })
-      }
-    }, getRandomNumber(900, 2000))
-  })
 
 export const urlParams = {
   provider: "provider",
+}
+
+export const getFormUrl = (providerId) => `form?${urlParams.provider}=${providerId}`
+
+export const getProvider = (providersList, providerId) => {
+  if (!Number.isFinite(providerId)) {
+    return
+  }
+  
+  return providersList.find(({ id }) => id === providerId)
 }

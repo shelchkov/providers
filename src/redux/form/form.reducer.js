@@ -27,6 +27,9 @@ export const formReducer = (state = INITIAL_STATE, action) => {
       return { ...state, buttonType: BUTTON_WAIT, canSubmit: false }
     
     case formActionTypes.SUBMIT_SUCCESS:
+      // eslint-disable-next-line no-console
+      console.log("Response", action.payload.response)
+
       return { ...state, canSubmit: false }
     
     case formActionTypes.SUBMIT_FAIL:
