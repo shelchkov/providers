@@ -24,8 +24,5 @@ const sendRequest = (provider, formData) =>
     }, getRandomNumber(900, 2000))
   })
 
-export const requestInfo = async (formData, selectedProvider) => {
-  const result = await sendRequest(selectedProvider, formData)
-
-  return result
-}
+export const requestInfo = async (formData, selectedProvider) =>
+  await sendRequest(selectedProvider, formData)
