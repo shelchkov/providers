@@ -25,4 +25,4 @@ const sendRequest = (provider, formData) =>
   })
 
 export const requestInfo = async (formData, selectedProvider) =>
-  await sendRequest(selectedProvider, formData)
+  sendRequest(selectedProvider, formData)
