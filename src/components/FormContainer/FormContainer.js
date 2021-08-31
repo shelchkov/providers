@@ -29,8 +29,6 @@ const WrapDiv = styled.div`
 
 export const FormContainer = ({ children }) => (
   <WrapDiv>
-    <Container>
-      {children}
-    </Container>
+    <Container>{children}</Container>
   </WrapDiv>
 )
