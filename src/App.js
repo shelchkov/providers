@@ -11,7 +11,11 @@ import Form from "./components/Form/Form"
 
 import { providersList } from "./utils/providers-list"
 import { requestInfo } from "./utils/api-utils"
-import { startSubmit, submitSuccess, submitFail } from "./redux/form/form.actions"
+import {
+  startSubmit,
+  submitSuccess,
+  submitFail,
+} from "./redux/form/form.actions"
 import { selectCanSubmit } from "./redux/form/form.selectors"
 import { getProvider } from "./utils/utils"
 
@@ -39,12 +43,15 @@ class App extends React.PureComponent {
     if (!this.props.canSubmit) {
       return
     }
-    
+
     this.props.startSubmit()
 
     try {
-      const response = await requestInfo(formData, this.state.selectedProvider)
-      
+      const response = await requestInfo(
+        formData,
+        this.state.selectedProvider
+      )
+
       this.props.submitSuccess(response)
       this.goHome()
     } catch (error) {
@@ -63,7 +70,7 @@ class App extends React.PureComponent {
             path="/"
             render={() => <ProvidersList setProvider={this.setProvider} />}
           />
-          
+
           <Route
             exact
             path="/form"
@@ -92,4 +99,8 @@ const mapDispatchToProps = (dispatch) => ({
   submitFail: (error) => dispatch(submitFail(error)),
 })
 
-export default compose(withScreenCover, withRouter, connect(mapStateToProps, mapDispatchToProps))(App)
+export default compose(
+  withScreenCover,
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(App)

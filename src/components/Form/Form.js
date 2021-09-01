@@ -19,8 +19,14 @@ import {
 } from "../../utils/utils"
 import { useScreenSize } from "../../effects/use-screen-size"
 import { useRefData } from "../../effects/use-ref-data"
-import { validationFail, validationSuccess } from "../../redux/form/form.actions"
-import { selectCanSubmit, selectError } from "../../redux/form/form.selectors"
+import {
+  validationFail,
+  validationSuccess,
+} from "../../redux/form/form.actions"
+import {
+  selectCanSubmit,
+  selectError,
+} from "../../redux/form/form.selectors"
 import { FormButton } from "./form-button"
 import { compose } from "redux"
 
@@ -71,7 +77,7 @@ const Form = React.memo(
       if (!provider || !provider.id) {
         const { search } = history.location
         const selectedProviderId = getProviderId(search)
-        
+
         setProvider(parseInt(selectedProviderId))
       }
 
@@ -225,7 +231,10 @@ const mapStateToProps = createStructuredSelector({
 
 const mapDispatchToProps = (dispatch) => ({
   validationFail: () => dispatch(validationFail()),
-  validationSuccess: () => dispatch(validationSuccess())
+  validationSuccess: () => dispatch(validationSuccess()),
 })
 
-export default compose(withRouter, connect(mapStateToProps, mapDispatchToProps))(Form)
+export default compose(
+  withRouter,
+  connect(mapStateToProps, mapDispatchToProps)
+)(Form)

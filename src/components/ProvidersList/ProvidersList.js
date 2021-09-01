@@ -38,4 +38,7 @@ const mapDispatchToProps = (dispatch) => ({
   resetForm: () => dispatch(resetForm()),
 })
 
-export const ProvidersList = connect(undefined, mapDispatchToProps)(ProvidersListView)
+export const ProvidersList = connect(
+  undefined,
+  mapDispatchToProps
+)(ProvidersListView)

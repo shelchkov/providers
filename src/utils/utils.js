@@ -24,16 +24,12 @@ export const validatePhone = (phone) => {
   if (phone.length !== 11) {
     return "Phone number should contain exactly 11 digits"
   }
-
-  return
 }
 
 export const validateAmount = (amount) => {
   if (!amount || amount < 1) {
     return "You can choose amount that lies between 1 and 1000 rubles"
   }
-
-  return
 }
 
 export const isEqual = (obj1, obj2) =>
@@ -50,18 +46,19 @@ export const isAllValuesEmpty = (obj) => {
 }
 
 export const getRandomNumber = (start, end) =>
-  Math.random() * ( end - start ) + start
+  Math.random() * (end - start) + start
 
 export const urlParams = {
   provider: "provider",
 }
 
-export const getFormUrl = (providerId) => `form?${urlParams.provider}=${providerId}`
+export const getFormUrl = (providerId) =>
+  `form?${urlParams.provider}=${providerId}`
 
 export const getProvider = (providersList, providerId) => {
   if (!Number.isFinite(providerId)) {
     return
   }
-  
+
   return providersList.find(({ id }) => id === providerId)
 }

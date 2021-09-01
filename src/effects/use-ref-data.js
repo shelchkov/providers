@@ -21,8 +21,6 @@ export const useRefData = (initialValue) => {
     if (data.current[property]) {
       return data.current[property]
     }
-
-    return
   }
 
   return { updateData, getData }
