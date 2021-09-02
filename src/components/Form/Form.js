@@ -16,6 +16,7 @@ import {
   validateAmount,
   isEqual,
   urlParams,
+  getProvider,
 } from "../../utils/utils"
 import { useScreenSize } from "../../effects/use-screen-size"
 import { useRefData } from "../../effects/use-ref-data"
@@ -29,6 +30,9 @@ import {
 } from "../../redux/form/form.selectors"
 import { FormButton } from "./form-button"
 import { compose } from "redux"
+import { selectProvider } from "../../redux/providers/providers.selectors"
+import { setProvider } from "../../redux/providers/providers.actions"
+import { providersList } from "../../utils/providers-list"
 
 const GetBackContainer = styled.div`
   display: flex;
@@ -48,8 +52,11 @@ const InputContainer = styled.div`
 const buttonNodeName = "BUTTON"
 const formNodeName = "FORM"
 
-const getProviderId = (search) =>
-  extractSearchValue(search, urlParams.provider)
+const getProviderId = (search) => {
+  const providerId = extractSearchValue(search, urlParams.provider)
+
+  return parseInt(providerId)
+}
 
 // eslint-disable-next-line react/display-name
 const Form = React.memo(
@@ -64,6 +71,8 @@ const Form = React.memo(
     canSubmit,
     error,
   }) => {
+    
+
     const { updateData, getData } = useRefData({ phone: "", amount: "" })
 
     const [formErrors, setFormErrors] = useState({
@@ -74,11 +83,16 @@ const Form = React.memo(
     const { screenHeight } = useScreenSize()
 
     useEffect(() => {
-      if (!provider || !provider.id) {
+      if (!provider || !Number.isFinite(provider.id)) {
         const { search } = history.location
-        const selectedProviderId = getProviderId(search)
+        const providerId = getProviderId(search)
+        const selectedProvider = getProvider(providersList, providerId)
 
-        setProvider(parseInt(selectedProviderId))
+        if (!selectedProvider) {
+          history.push("/")
+        }
+
+        setProvider(providerId)
       }
 
       // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -158,6 +172,10 @@ const Form = React.memo(
     }, [])
 
     const handleFormSubmit = () => {
+      if (!canSubmit) {
+        return
+      }
+
       submitForm(getData())
     }
 
@@ -182,6 +200,10 @@ const Form = React.memo(
 
     const setPhoneValue = (data) => setForm("phone", data)
     const setAmountValue = (data) => setForm("amount", data)
+
+    if (!provider) {
+      return <></>
+    }
 
     return (
       <FormContainer>
@@ -227,11 +249,13 @@ const Form = React.memo(
 const mapStateToProps = createStructuredSelector({
   canSubmit: selectCanSubmit,
   error: selectError,
+  provider: selectProvider,
 })
 
 const mapDispatchToProps = (dispatch) => ({
   validationFail: () => dispatch(validationFail()),
   validationSuccess: () => dispatch(validationSuccess()),
+  setProvider: (id) => dispatch(setProvider(id))
 })
 
 export default compose(

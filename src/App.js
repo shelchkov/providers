@@ -9,47 +9,26 @@ import { withScreenCover } from "screen-cover"
 import { ProvidersList } from "./components/ProvidersList/ProvidersList"
 import Form from "./components/Form/Form"
 
-import { providersList } from "./utils/providers-list"
 import { requestInfo } from "./utils/api-utils"
 import {
   startSubmit,
   submitSuccess,
   submitFail,
 } from "./redux/form/form.actions"
-import { selectCanSubmit } from "./redux/form/form.selectors"
-import { getProvider } from "./utils/utils"
+import { selectProvider } from "./redux/providers/providers.selectors"
 
 const AppDiv = styled.div`
   text-align: center;
 `
 
 class App extends React.PureComponent {
-  constructor() {
-    super()
-    this.state = { selectedProvider: {} }
-  }
-
-  setProvider = (providerId) => {
-    const selectedProvider = getProvider(providersList, providerId)
-
-    if (!selectedProvider) {
-      this.props.history.push("/")
-    }
-
-    this.setState({ selectedProvider })
-  }
-
   submitForm = async (formData) => {
-    if (!this.props.canSubmit) {
-      return
-    }
-
     this.props.startSubmit()
 
     try {
       const response = await requestInfo(
         formData,
-        this.state.selectedProvider
+        this.props.provider
       )
 
       this.props.submitSuccess(response)
@@ -68,7 +47,7 @@ class App extends React.PureComponent {
           <Route
             exact
             path="/"
-            render={() => <ProvidersList setProvider={this.setProvider} />}
+            component={ProvidersList}
           />
 
           <Route
@@ -78,8 +57,6 @@ class App extends React.PureComponent {
               <Form
                 getHome={this.goHome}
                 submitForm={this.submitForm}
-                provider={this.state.selectedProvider}
-                setProvider={this.setProvider}
               />
             )}
           />
@@ -90,7 +67,7 @@ class App extends React.PureComponent {
 }
 
 const mapStateToProps = createStructuredSelector({
-  canSubmit: selectCanSubmit,
+  provider: selectProvider,
 })
 
 const mapDispatchToProps = (dispatch) => ({
