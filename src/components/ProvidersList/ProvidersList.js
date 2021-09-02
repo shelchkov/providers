@@ -37,7 +37,7 @@ const ProvidersListView = ({ setProvider, resetForm }) => {
 
 const mapDispatchToProps = (dispatch) => ({
   resetForm: () => dispatch(resetForm()),
-  setProvider: (id) => dispatch(setProvider(id))
+  setProvider: (id) => dispatch(setProvider(id)),
 })
 
 export const ProvidersList = connect(

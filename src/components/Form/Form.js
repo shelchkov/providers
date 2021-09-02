@@ -71,8 +71,6 @@ const Form = React.memo(
     canSubmit,
     error,
   }) => {
-    
-
     const { updateData, getData } = useRefData({ phone: "", amount: "" })
 
     const [formErrors, setFormErrors] = useState({
@@ -255,7 +253,7 @@ const mapStateToProps = createStructuredSelector({
 const mapDispatchToProps = (dispatch) => ({
   validationFail: () => dispatch(validationFail()),
   validationSuccess: () => dispatch(validationSuccess()),
-  setProvider: (id) => dispatch(setProvider(id))
+  setProvider: (id) => dispatch(setProvider(id)),
 })
 
 export default compose(

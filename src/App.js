@@ -26,10 +26,7 @@ class App extends React.PureComponent {
     this.props.startSubmit()
 
     try {
-      const response = await requestInfo(
-        formData,
-        this.props.provider
-      )
+      const response = await requestInfo(formData, this.props.provider)
 
       this.props.submitSuccess(response)
       this.goHome()
@@ -44,20 +41,13 @@ class App extends React.PureComponent {
     return (
       <AppDiv>
         <Switch>
-          <Route
-            exact
-            path="/"
-            component={ProvidersList}
-          />
+          <Route exact path="/" component={ProvidersList} />
 
           <Route
             exact
             path="/form"
             render={() => (
-              <Form
-                getHome={this.goHome}
-                submitForm={this.submitForm}
-              />
+              <Form getHome={this.goHome} submitForm={this.submitForm} />
             )}
           />
         </Switch>

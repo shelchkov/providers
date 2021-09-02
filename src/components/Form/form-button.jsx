@@ -1,12 +1,16 @@
-import React from 'react'
-import { createStructuredSelector } from 'reselect'
-import { selectButtonType, selectIsValid } from '../../redux/form/form.selectors'
+import React from "react"
+import { createStructuredSelector } from "reselect"
+import {
+  selectButtonType,
+  selectIsValid,
+} from "../../redux/form/form.selectors"
 import { connect } from "react-redux"
 import { ActiveBtn, NotAllowedBtn } from "../Button/Button"
-import { buttonStates } from '../../utils/button-states'
+import { buttonStates } from "../../utils/button-states"
 
 const FormButtonView = ({ checkForm, isValid, buttonType }) => {
-  const { bgColor, color, text } = buttonStates[buttonType] || buttonStates.BUTTON_SUBMIT
+  const { bgColor, color, text } =
+    buttonStates[buttonType] || buttonStates.BUTTON_SUBMIT
 
   return (
     <>

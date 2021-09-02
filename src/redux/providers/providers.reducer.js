@@ -3,15 +3,21 @@ import { getProvider } from "../../utils/utils"
 import { providersList } from "../../utils/providers-list"
 
 const initialState = {
-	selectedProvider: undefined,
+  selectedProvider: undefined,
 }
 
 export const providersReducer = (state = initialState, action) => {
-	switch (action.type) {
-		case providersActionTypes.SELECT_PROVIDER:
-			return { ...state, selectedProvider: getProvider(providersList, action.payload.providerId) }
+  switch (action.type) {
+    case providersActionTypes.SELECT_PROVIDER:
+      return {
+        ...state,
+        selectedProvider: getProvider(
+          providersList,
+          action.payload.providerId
+        ),
+      }
 
-		default:
-			return state
-	}
+    default:
+      return state
+  }
 }
