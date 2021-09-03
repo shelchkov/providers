@@ -6,6 +6,7 @@ import { resetForm } from "../../redux/form/form.actions"
 import { useScreenCover } from "screen-cover"
 import { useHistory } from "react-router-dom"
 import { getFormUrl } from "../../utils/utils"
+import { setProvider } from "../../redux/providers/providers.actions"
 
 const ProvidersListView = ({ setProvider, resetForm }) => {
   const { showCover } = useScreenCover()
@@ -36,6 +37,7 @@ const ProvidersListView = ({ setProvider, resetForm }) => {
 
 const mapDispatchToProps = (dispatch) => ({
   resetForm: () => dispatch(resetForm()),
+  setProvider: (id) => dispatch(setProvider(id)),
 })
 
 export const ProvidersList = connect(
