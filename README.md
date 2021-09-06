@@ -1,8 +1,10 @@
 # Payp
 
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=shelchkov_providers&metric=alert_status)](https://sonarcloud.io/dashboard?id=shelchkov_providers)
+
 App for paying your phone bills.
 
-Check out [Demo](http://bravedevs.epizy.com/ "Demo").
+Check out [Demo](http://payp.epizy.com/ "Demo").
 
 List of providers:
 
