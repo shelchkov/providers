@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useEffect, useCallback } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { createStructuredSelector } from "reselect"
@@ -14,12 +14,11 @@ import {
   extractSearchValue,
   validatePhone,
   validateAmount,
-  isEqual,
   urlParams,
   getProvider,
 } from "../../utils/utils"
 import { useScreenSize } from "../../effects/use-screen-size"
-import { useRefData } from "../../effects/use-ref-data"
+import { useForm } from "../../effects/use-form"
 import {
   validationFail,
   validationSuccess,
@@ -71,14 +70,11 @@ const Form = React.memo(
     canSubmit,
     error,
   }) => {
-    const { updateData, getData } = useRefData({ phone: "", amount: "" })
-
-    const [formErrors, setFormErrors] = useState({
-      phone: "",
-      amount: "",
-    })
-
     const { screenHeight } = useScreenSize()
+    const { formErrors, setForm, resetError, validate, getData } = useForm(
+      { phone: "", amount: "" },
+      { phone: validatePhone, amount: validateAmount }
+    )
 
     useEffect(() => {
       if (!provider || !Number.isFinite(provider.id)) {
@@ -92,47 +88,25 @@ const Form = React.memo(
 
         setProvider(providerId)
       }
-
       // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
-    const setForm = (field, data) => {
-      const value = data.replace(/\D/g, "")
-
-      if (getData(field) !== value) {
-        updateData({ [field]: value })
-      }
-    }
-
-    function checkForm() {
+    const checkForm = () => {
       if (!canSubmit) {
         return
       }
 
-      const phoneError = validatePhone(getData("phone"))
-      const amountError = validateAmount(getData("amount"))
+      const newErrors = validate()
 
-      const newErrors = {
-        phone: phoneError,
-        amount: amountError,
-      }
-
-      if (!isEqual(newErrors, formErrors)) {
-        setFormErrors(newErrors)
-      }
-
-      if (!phoneError && !amountError) {
-        validationSuccess()
-      } else {
+      if (newErrors) {
         validationFail()
+
+        return newErrors
       }
 
-      return phoneError || amountError
-        ? {
-            phone: phoneError,
-            amount: amountError,
-          }
-        : null
+      validationSuccess()
+
+      return null
     }
 
     const checkFormAndSubmit = (event) => {
@@ -176,17 +150,6 @@ const Form = React.memo(
 
       submitForm(getData())
     }
-
-    const resetError = useCallback(
-      (field) => {
-        const newErrors = { ...formErrors, [field]: "" }
-
-        if (!isEqual(newErrors, formErrors)) {
-          setFormErrors(newErrors)
-        }
-      },
-      [formErrors, setFormErrors]
-    )
 
     const handlePhoneFocus = useCallback(() => {
       resetError("phone")
