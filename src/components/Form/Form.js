@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from "react"
+import React, { useCallback } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { createStructuredSelector } from "reselect"
@@ -10,13 +10,7 @@ import { Input } from "../Input/Input"
 import { FormImage } from "./FormImage"
 import { GetBackBtn } from "../Button/Button"
 
-import {
-  extractSearchValue,
-  validatePhone,
-  validateAmount,
-  urlParams,
-  getProvider,
-} from "../../utils/utils"
+import { validatePhone, validateAmount } from "../../utils/utils"
 import { useScreenSize } from "../../effects/use-screen-size"
 import { useForm } from "../../effects/use-form"
 import {
@@ -31,7 +25,8 @@ import { FormButton } from "./form-button"
 import { compose } from "redux"
 import { selectProvider } from "../../redux/providers/providers.selectors"
 import { setProvider } from "../../redux/providers/providers.actions"
-import { providersList } from "../../utils/providers-list"
+import { useEnter } from "../../effects/use-enter"
+import { useProviderId } from "../../effects/use-provider-id"
 
 const GetBackContainer = styled.div`
   display: flex;
@@ -50,12 +45,6 @@ const InputContainer = styled.div`
 
 const buttonNodeName = "BUTTON"
 const formNodeName = "FORM"
-
-const getProviderId = (search) => {
-  const providerId = extractSearchValue(search, urlParams.provider)
-
-  return parseInt(providerId)
-}
 
 // eslint-disable-next-line react/display-name
 const Form = React.memo(
@@ -76,20 +65,8 @@ const Form = React.memo(
       { phone: validatePhone, amount: validateAmount }
     )
 
-    useEffect(() => {
-      if (!provider || !Number.isFinite(provider.id)) {
-        const { search } = history.location
-        const providerId = getProviderId(search)
-        const selectedProvider = getProvider(providersList, providerId)
-
-        if (!selectedProvider) {
-          history.push("/")
-        }
-
-        setProvider(providerId)
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+    useEnter(handleEnterPress)
+    useProviderId(provider, setProvider, history)
 
     const checkForm = () => {
       if (!canSubmit) {
@@ -114,11 +91,7 @@ const Form = React.memo(
       !checkForm() && handleFormSubmit()
     }
 
-    const handleEnterPress = (event) => {
-      if (event.keyCode !== 13) {
-        return
-      }
-
+    function handleEnterPress(event) {
       for (const el of event.path) {
         if (el.nodeName === buttonNodeName && el.onclick) {
           return
@@ -129,19 +102,8 @@ const Form = React.memo(
         }
       }
 
-      if (!checkForm()) {
-        handleFormSubmit()
-      }
+      !checkForm() && handleFormSubmit()
     }
-
-    useEffect(() => {
-      document.addEventListener("keydown", handleEnterPress)
-
-      return () => {
-        document.removeEventListener("keydown", handleEnterPress)
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     const handleFormSubmit = () => {
       if (!canSubmit) {
