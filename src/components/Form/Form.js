@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useCallback } from "react"
 import styled from "styled-components"
 import { connect } from "react-redux"
 import { createStructuredSelector } from "reselect"
@@ -10,16 +10,9 @@ import { Input } from "../Input/Input"
 import { FormImage } from "./FormImage"
 import { GetBackBtn } from "../Button/Button"
 
-import {
-  extractSearchValue,
-  validatePhone,
-  validateAmount,
-  isEqual,
-  urlParams,
-  getProvider,
-} from "../../utils/utils"
+import { validatePhone, validateAmount } from "../../utils/utils"
 import { useScreenSize } from "../../effects/use-screen-size"
-import { useRefData } from "../../effects/use-ref-data"
+import { useForm } from "../../effects/use-form"
 import {
   validationFail,
   validationSuccess,
@@ -32,7 +25,8 @@ import { FormButton } from "./form-button"
 import { compose } from "redux"
 import { selectProvider } from "../../redux/providers/providers.selectors"
 import { setProvider } from "../../redux/providers/providers.actions"
-import { providersList } from "../../utils/providers-list"
+import { useEnter } from "../../effects/use-enter"
+import { useProviderId } from "../../effects/use-provider-id"
 
 const GetBackContainer = styled.div`
   display: flex;
@@ -52,12 +46,6 @@ const InputContainer = styled.div`
 const buttonNodeName = "BUTTON"
 const formNodeName = "FORM"
 
-const getProviderId = (search) => {
-  const providerId = extractSearchValue(search, urlParams.provider)
-
-  return parseInt(providerId)
-}
-
 // eslint-disable-next-line react/display-name
 const Form = React.memo(
   ({
@@ -71,68 +59,31 @@ const Form = React.memo(
     canSubmit,
     error,
   }) => {
-    const { updateData, getData } = useRefData({ phone: "", amount: "" })
-
-    const [formErrors, setFormErrors] = useState({
-      phone: "",
-      amount: "",
-    })
-
     const { screenHeight } = useScreenSize()
+    const { formErrors, setForm, resetError, validate, getData } = useForm(
+      { phone: "", amount: "" },
+      { phone: validatePhone, amount: validateAmount }
+    )
 
-    useEffect(() => {
-      if (!provider || !Number.isFinite(provider.id)) {
-        const { search } = history.location
-        const providerId = getProviderId(search)
-        const selectedProvider = getProvider(providersList, providerId)
+    useEnter(handleEnterPress)
+    useProviderId(provider, setProvider, history)
 
-        if (!selectedProvider) {
-          history.push("/")
-        }
-
-        setProvider(providerId)
-      }
-
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
-
-    const setForm = (field, data) => {
-      const value = data.replace(/\D/g, "")
-
-      if (getData(field) !== value) {
-        updateData({ [field]: value })
-      }
-    }
-
-    function checkForm() {
+    const checkForm = () => {
       if (!canSubmit) {
         return
       }
 
-      const phoneError = validatePhone(getData("phone"))
-      const amountError = validateAmount(getData("amount"))
+      const newErrors = validate()
 
-      const newErrors = {
-        phone: phoneError,
-        amount: amountError,
-      }
-
-      if (!isEqual(newErrors, formErrors)) {
-        setFormErrors(newErrors)
-      }
-
-      if (!phoneError && !amountError) {
-        validationSuccess()
-      } else {
+      if (newErrors) {
         validationFail()
+
+        return newErrors
       }
 
-      return phoneError || amountError
-        ? {
-            phone: phoneError,
-            amount: amountError,
-          }
-        : null
+      validationSuccess()
+
+      return null
     }
 
     const checkFormAndSubmit = (event) => {
@@ -140,11 +91,7 @@ const Form = React.memo(
       !checkForm() && handleFormSubmit()
     }
 
-    const handleEnterPress = (event) => {
-      if (event.keyCode !== 13) {
-        return
-      }
-
+    function handleEnterPress(event) {
       for (const el of event.path) {
         if (el.nodeName === buttonNodeName && el.onclick) {
           return
@@ -155,19 +102,8 @@ const Form = React.memo(
         }
       }
 
-      if (!checkForm()) {
-        handleFormSubmit()
-      }
+      !checkForm() && handleFormSubmit()
     }
-
-    useEffect(() => {
-      document.addEventListener("keydown", handleEnterPress)
-
-      return () => {
-        document.removeEventListener("keydown", handleEnterPress)
-      }
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
 
     const handleFormSubmit = () => {
       if (!canSubmit) {
@@ -176,17 +112,6 @@ const Form = React.memo(
 
       submitForm(getData())
     }
-
-    const resetError = useCallback(
-      (field) => {
-        const newErrors = { ...formErrors, [field]: "" }
-
-        if (!isEqual(newErrors, formErrors)) {
-          setFormErrors(newErrors)
-        }
-      },
-      [formErrors, setFormErrors]
-    )
 
     const handlePhoneFocus = useCallback(() => {
       resetError("phone")

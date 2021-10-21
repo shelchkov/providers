@@ -62,3 +62,5 @@ export const getProvider = (providersList, providerId) => {
 
   return providersList.find(({ id }) => id === providerId)
 }
+
+export const noop = () => undefined
