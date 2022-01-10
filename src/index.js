@@ -7,14 +7,17 @@ import { Provider } from "react-redux"
 import { store } from "./redux/store"
 import { BrowserRouter } from "react-router-dom"
 import { ScreenCoverProvider } from "screen-cover"
+import { ErrorBoundary } from "./components/ErrorBoundary/ErrorBoundary"
 
 ReactDOM.render(
-  <Provider store={store}>
-    <BrowserRouter>
-      <ScreenCoverProvider>
-        <App />
-      </ScreenCoverProvider>
-    </BrowserRouter>
-  </Provider>,
+  <ErrorBoundary>
+    <Provider store={store}>
+      <BrowserRouter>
+        <ScreenCoverProvider>
+          <App />
+        </ScreenCoverProvider>
+      </BrowserRouter>
+    </Provider>
+  </ErrorBoundary>,
   document.getElementById("root")
 )
