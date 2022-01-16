@@ -1,18 +1,16 @@
 version: 2.1
 
-orbs:
-  node: circleci/node@4.7.0
+executors:
+  node-image:
+    docker:
+      - image: cimg/node:12.22
 
 jobs:
   build-and-deploy:
-    executor:
-      name: node/default
-      tag: '10.4'
+    executor: node-image
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
+      - run: npm install
       - run: npm run build
       - run: node deploy.js
 
