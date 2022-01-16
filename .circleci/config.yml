@@ -1,21 +1,23 @@
 version: 2.1
-orbs:
-  node: circleci/node@4.7.0
+
+executors:
+  node-image:
+    docker:
+      - image: cimg/node:12.22
+
 jobs:
   build-and-deploy:
-    executor:
-      name: node/default
-      tag: '10.4'
+    executor: node-image
     steps:
       - checkout
-      - node/with-cache:
-          steps:
-            - run: npm install
+      - run: npm install
       - run: npm run build
       - run: node deploy.js
 
-deploy:
-   triggers:
+workflows:
+  version: 2
+  monthly_deploy:
+    triggers:
      - schedule:
          # Every month at 4am on 17th
          cron: "0 4 17 * *"
@@ -23,5 +25,13 @@ deploy:
            branches:
              only:
                - master
-   jobs:
+    jobs:
      - build-and-deploy
+  tagged_deploy:
+    jobs:
+      - build-and-deploy:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
