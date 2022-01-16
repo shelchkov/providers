@@ -1,6 +1,8 @@
 version: 2.1
+
 orbs:
   node: circleci/node@4.7.0
+
 jobs:
   build-and-deploy:
     executor:
@@ -14,8 +16,10 @@ jobs:
       - run: npm run build
       - run: node deploy.js
 
-deploy:
-   triggers:
+workflows:
+  version: 2
+  monthly_deploy:
+    triggers:
      - schedule:
          # Every month at 4am on 17th
          cron: "0 4 17 * *"
@@ -23,5 +27,13 @@ deploy:
            branches:
              only:
                - master
-   jobs:
+    jobs:
      - build-and-deploy
+  tagged_deploy:
+    jobs:
+      - build-and-deploy:
+          filters:
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
