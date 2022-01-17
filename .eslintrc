@@ -15,6 +15,7 @@
       "version": "detect"
     }
   },
+  "parser": "babel-eslint",
   "rules": {
     "no-console": "warn",
     "no-eval": "error",
