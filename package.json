@@ -1,6 +1,6 @@
 {
   "name": "payp",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "homepage": "http://payp.epizy.com/",
   "scripts": {
     "start": "react-scripts start",
