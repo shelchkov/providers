@@ -2,8 +2,8 @@
   on: "EVENT"
   events:
   - type: "PUSH"
-  refs:
-  - "refs/tags/*"
+    refs:
+    - "refs/tags/*"
   actions:
   - action: "Build and upload via FTP"
     type: "BUILD"
