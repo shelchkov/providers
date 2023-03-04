@@ -1,0 +1,30 @@
+- pipeline: "deploy"
+  on: "EVENT"
+  events:
+  - type: "PUSH"
+    refs:
+    - "refs/tags/v.*"
+  actions:
+  - action: "Build and upload via FTP"
+    type: "BUILD"
+    docker_image_name: "library/node"
+    docker_image_tag: "6"
+    execute_commands:
+    - "npm install"
+    - "npm run build"
+    - "node deploy.js"
+
+- pipeline: "scheduled deploy"
+  on: "SCHEDULE"
+  refs:
+  - "refs/heads/master"
+  cron: "0 0 5 * *"
+  actions:
+  - action: "Build and upload via FTP"
+    type: "BUILD"
+    docker_image_name: "library/node"
+    docker_image_tag: "6"
+    execute_commands:
+    - "npm install"
+    - "npm run build"
+    - "node deploy.js"
