@@ -8,7 +8,7 @@
   - action: "Build and upload via FTP"
     type: "BUILD"
     docker_image_name: "library/node"
-    docker_image_tag: "6"
+    docker_image_tag: "12"
     execute_commands:
     - "npm install"
     - "npm run build"
@@ -23,7 +23,7 @@
   - action: "Build and upload via FTP"
     type: "BUILD"
     docker_image_name: "library/node"
-    docker_image_tag: "6"
+    docker_image_tag: "12"
     execute_commands:
     - "npm install"
     - "npm run build"
