@@ -16,9 +16,11 @@ const EXPIRATION_DATE_IN_DAYS = process.env.EXPIRATION_DATE_IN_DAYS || 31
 const ftpClient = new FtpClient()
 
 ftpClient.on("ready", () => {
-  cleanupRemoteDirectory(destinationPath)
-
+  console.log("Start deploy")
   glob.sync(`${basePath}/**/*`).forEach(handlePath)
+  console.log("Upload completed, cleaning up")
+  cleanupRemoteDirectory(destinationPath)
+  console.log("End deploy")
 })
 
 ftpClient.connect(config)
@@ -61,6 +63,7 @@ function cleanup(pathObject, directory) {
   }
 
   if (isExpired(pathObject.date)) {
+    console.log(path, pathObject.date)
     ftpClient.delete(path, (error) => {
       if (error) throw error
 
