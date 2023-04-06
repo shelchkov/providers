@@ -18,7 +18,7 @@
   on: "SCHEDULE"
   refs:
   - "refs/heads/master"
-  cron: "0 0 5 * *"
+  cron: "0 1 */15 * *"
   actions:
   - action: "Build and upload via FTP"
     type: "BUILD"
